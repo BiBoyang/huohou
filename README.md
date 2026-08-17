@@ -28,6 +28,8 @@ npx skills update -g -y
 | `huohou-collab-mode` | 协作模式入口：WORKFLOW.md 协议 + 拓扑并行调度 + 证据制验收 | `协作模式` / `退出协作模式` |
 | `huohou-digest` | 研究消化：把书/源码/长文提炼成结构化学习笔记，含"知识还是习惯"的固化判断 | "帮我消化/学习/研究 X" |
 | `huohou-polish` | 写作润色：去翻译腔和 AI 八股、砍废话，保原意和个人风格 | "帮我润色/看看这段文字" |
+| `huohou-swift-concurrency` | Swift 并发专家：数据竞争诊断、async/await 迁移、actor 隔离、Swift 6 迁移（收编自 [Swift Concurrency Course](https://www.swiftconcurrencycourse.com) 的 skill，已同步上游 v2.3.0，保留英文原文） | Swift 并发问题、Swift 6 迁移 |
+| `huohou-rust-expert` | Rust 专家：借用检查器诊断（E0502/E0499 等）、生命周期、Send/Sync、错误处理、async/tokio、unsafe 审查；先理解"借用检查器在防什么"再给最小安全修复 | Rust 报错、并发、错误处理设计 |
 
 ## 规范
 
