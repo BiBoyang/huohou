@@ -6,7 +6,7 @@
 
 ```bash
 # 全部安装到共享目录（Claude Code / Codex / Kimi Code / Cursor 等自动可见）
-npx skills add <your-github-user>/huohou -g -y
+npx skills add BiBoyang/huohou -g -y
 
 # 更新
 npx skills update -g -y
