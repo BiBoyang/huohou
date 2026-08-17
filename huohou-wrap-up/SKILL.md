@@ -1,5 +1,5 @@
 ---
-name: wrap-up
+name: huohou-wrap-up
 description: <MANDATORY>用户发送「收尾」「收尾并发布」，或要求提交/推送/发布/打 tag 时必须调用本 skill。</MANDATORY> 开发收尾与发布链路：更新 session 日志、按需同步 README、跑基础校验、一次性给出 commit message 草案与命令预览，用户回复 o 后提交推送；发布模式追加语义化版本升级、annotated tag 与推送。
 ---
 

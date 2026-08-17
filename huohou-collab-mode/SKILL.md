@@ -1,5 +1,5 @@
 ---
-name: collab-mode
+name: huohou-collab-mode
 description: <MANDATORY>用户发送「协作模式」或明确表达进入时调用；发送「退出协作模式」时退出。</MANDATORY> 协作模式协议入口：固定"用户实现 + 助手规划/Review"的分工，详细协议读根目录 WORKFLOW.md。本 skill 是触发器和增强层，不重复协议本体。
 ---
 
@@ -33,6 +33,6 @@ WORKFLOW.md §4.5 定义了跨 agent 交接；调度多个执行任务时按拓�
 
 ## 增强 3：与单任务 skill 的衔接
 
-- 协作模式内的**计划阶段**：复用 `plan-first` 的方案纪律（候选方案、取舍、验证方式），但产出形式按 WORKFLOW.md 的 Plan Card
-- **Review Gate**：复用 `code-review` 的检查清单，结论只出 `Approved` / `Changes Requested`
+- 协作模式内的**计划阶段**：复用 `huohou-plan-first` 的方案纪律（候选方案、取舍、验证方式），但产出形式按 WORKFLOW.md 的 Plan Card
+- **Review Gate**：复用 `huohou-code-review` 的检查清单，结论只出 `Approved` / `Changes Requested`
 - 协议外冲突时优先级：项目 AGENTS.md > 全局 AGENTS.md > WORKFLOW.md > 本 skill

@@ -16,18 +16,18 @@ npx skills update -g -y
 
 ## 收录
 
-工程线：`plan-first`（动手前）→ 写码（`recover-from-errors` 护航）→ `code-review`（写完）→ `wrap-up`（发布）；`collab-mode` 是大任务的可选增强模式。
-内容线：`digest`（输入）→ `polish`（输出前）→ md2wechat（发布，不在本仓库）。
+工程线：`huohou-plan-first`（动手前）→ 写码（`huohou-recover-from-errors` 护航）→ `huohou-code-review`（写完）→ `huohou-wrap-up`（发布）；`huohou-collab-mode` 是大任务的可选增强模式。
+内容线：`huohou-digest`（输入）→ `huohou-polish`（输出前）→ md2wechat（发布，不在本仓库）。
 
 | Skill | 用途 | 触发 |
 |---|---|---|
-| `plan-first` | 动手前先出方案：根因分析/候选设计、取舍、验证方式，列出待拍板决策后停下等「开干」 | 处理 issue、新功能、重构前强制 |
-| `recover-from-errors` | 报错防漂移：回锚点核对，修因不修表，三次不过即停 | 工具/命令反复报错时强制 |
-| `code-review` | 通用评审流程与纪律（提炼自 deepseek-harness），含 Ousterhout Red Flags 清单 | review PR/diff、代码评审 |
-| `wrap-up` | 开发收尾与发布链路：session 日志、README 同步、校验、commit、tag | `收尾` / `收尾并发布` |
-| `collab-mode` | 协作模式入口：WORKFLOW.md 协议 + 拓扑并行调度 + 证据制验收 | `协作模式` / `退出协作模式` |
-| `digest` | 研究消化：把书/源码/长文提炼成结构化学习笔记，含"知识还是习惯"的固化判断 | "帮我消化/学习/研究 X" |
-| `polish` | 写作润色：去翻译腔和 AI 八股、砍废话，保原意和个人风格 | "帮我润色/看看这段文字" |
+| `huohou-plan-first` | 动手前先出方案：根因分析/候选设计、取舍、验证方式，列出待拍板决策后停下等「开干」 | 处理 issue、新功能、重构前强制 |
+| `huohou-recover-from-errors` | 报错防漂移：回锚点核对，修因不修表，三次不过即停 | 工具/命令反复报错时强制 |
+| `huohou-code-review` | 通用评审流程与纪律（提炼自 deepseek-harness），含 Ousterhout Red Flags 清单 | review PR/diff、代码评审 |
+| `huohou-wrap-up` | 开发收尾与发布链路：session 日志、README 同步、校验、commit、tag | `收尾` / `收尾并发布` |
+| `huohou-collab-mode` | 协作模式入口：WORKFLOW.md 协议 + 拓扑并行调度 + 证据制验收 | `协作模式` / `退出协作模式` |
+| `huohou-digest` | 研究消化：把书/源码/长文提炼成结构化学习笔记，含"知识还是习惯"的固化判断 | "帮我消化/学习/研究 X" |
+| `huohou-polish` | 写作润色：去翻译腔和 AI 八股、砍废话，保原意和个人风格 | "帮我润色/看看这段文字" |
 
 ## 规范
 

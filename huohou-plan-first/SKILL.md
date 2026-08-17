@@ -1,5 +1,5 @@
 ---
-name: plan-first
+name: huohou-plan-first
 description: <MANDATORY>处理任何 issue、bug、新功能、重构前必须先调用本 skill 输出方案；用户说「开干」或「o」之前禁止输出代码、diff、命令。</MANDATORY> 动手前先出方案：根因分析/候选设计、取舍、验证方式、待拍板决策点，输出后立即停止等待确认。
 ---
 

@@ -1,9 +1,11 @@
 ---
-name: code-review
+name: huohou-code-review
 description: 通用代码评审助手，提炼自 deepseek-harness 的 dsh-code-review。当用户要求 review PR/diff/改动、做代码评审、检查提交质量时使用。核心立场：这是判断指南而不是勾选清单；正确性、生命周期、安全优先于风格；一个有证据的 blocker 胜过一打 nit。
 ---
 
 # Code Review（通用评审纪律）
+
+> 注意：与 Claude Code 官方插件市场的 `/code-review` 插件（PR 评论自动化工具）是两个东西——那个管"把评论发回 GitHub PR"，本 skill 管"怎么判断和报告"。两者可配合：先按本 skill 的纪律做语义评审，需要发到 PR 时再调官方插件。
 
 **本 skill 是判断指南，不是勾选清单。** 不要机械逐条打勾；每条检查都要落到"这个 diff 的具体证据"上。
 
