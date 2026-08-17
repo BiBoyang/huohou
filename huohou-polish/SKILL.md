@@ -29,7 +29,7 @@ description: 写作润色助手。当用户要求润色、修改、改进一段�
 ## 专项参考
 
 - 技术文章（教程、踩坑、原理、方案对比）：读 `references/tech-article.md`，有专项清单和 12 问自检
-- AI 味拿不准、需要具体禁用词表：查 `references/anti-ai-flavor.md`
+- 去 AI 味：读 `references/anti-ai-flavor.md`——先诊断结构问题（铺垫/均匀/闭环/升华），词面清理放最后
 
 ## 红线
 
