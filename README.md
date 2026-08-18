@@ -21,7 +21,7 @@ npx skills update -g -y
 
 | Skill | 用途 | 触发 |
 |---|---|---|
-| `huohou-plan-first` | 动手前先出方案：根因分析/候选设计、取舍、验证方式，列出待拍板决策后停下等「开干」 | 处理 issue、新功能、重构前强制 |
+| `huohou-plan-first` | 动手前先出方案：根因分析/候选设计、取舍、验证方式，列出待拍板决策后停下等「开干」 | 修改代码 / 实现功能 / 修 bug / 重构前强制；只读 review、解释、调研不触发 |
 | `huohou-recover-from-errors` | 报错防漂移：回锚点核对，修因不修表，三次不过即停 | 工具/命令反复报错时强制 |
 | `huohou-code-review` | 通用评审流程与纪律（提炼自 deepseek-harness），含 Ousterhout Red Flags 清单 | review PR/diff、代码评审 |
 | `huohou-wrap-up` | 开发收尾与发布链路：session 日志、README 同步、校验、commit、tag | `收尾` / `收尾并发布` |
