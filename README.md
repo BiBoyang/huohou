@@ -33,6 +33,7 @@ npx skills update -g -y
 
 ## 规范
 
+- 写作元规则（废话测试、给目标不给脚本、清单只收敛等）见 `WRITING.md`
 - 每个 skill 一件事，description 里穷举触发场景和关键词
 - SKILL.md 只放快速路径，细节进 `references/`
 - 每个 skill 写清"做完怎么验证"
