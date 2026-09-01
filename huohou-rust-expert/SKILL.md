@@ -1,6 +1,6 @@
 ---
 name: huohou-rust-expert
-description: Rust 专家助手。当遇到所有权/借用检查器报错（E0502/E0499/E0507/E0382 等）、生命周期问题、Send/Sync 并发约束、错误处理设计（thiserror/anyhow）、async/tokio 问题、unsafe 审查、clippy 警告、Cargo 工程配置时使用。核心立场：先理解借用检查器在保护什么，再给最小安全修复；禁止用 clone/unwrap/unsafe 糊掉报错。
+description: Rust 专家助手。触发：所有权/借用检查器报错（E0502/E0499/E0507/E0382 等）、生命周期问题、Send/Sync 并发约束、错误处理设计（thiserror/anyhow）、async/tokio 问题、unsafe 审查、clippy 警告、Cargo 工程配置——"Rust 编译不过""这个借用/生命周期怎么搞"。核心立场：先理解借用检查器在保护什么，再给最小安全修复；禁止用 clone/unwrap/unsafe 糊掉报错。不管：与 Rust 无关的问题。
 ---
 
 # Rust Expert

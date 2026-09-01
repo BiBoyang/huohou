@@ -1,6 +1,6 @@
 ---
 name: huohou-code-review
-description: 通用代码评审助手，提炼自 deepseek-harness 的 dsh-code-review。当用户要求 review PR/diff/改动、做代码评审、检查提交质量时使用。核心立场：这是判断指南而不是勾选清单；路线层问题优先于代码层挑错（触发式，不重复挑战已定路线）；正确性、生命周期、安全优先于风格；根因优先，一个有证据的 blocker 胜过一打 nit。
+description: 通用代码评审助手，提炼自 deepseek-harness 的 dsh-code-review。触发：review PR/diff/改动、做代码评审、检查提交质量，或"看看代码有没有问题""帮我评审一下""合并前把关"。核心立场：这是判断指南而不是勾选清单；路线层问题优先于代码层挑错（触发式，不重复挑战已定路线）；正确性、生命周期、安全优先于风格；根因优先，一个有证据的 blocker 胜过一打 nit。不管：把评论发回 GitHub PR（用官方 code-review 插件）、调试报错根因（用 huohou-recover-from-errors）。
 ---
 
 # Code Review（通用评审纪律）

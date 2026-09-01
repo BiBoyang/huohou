@@ -1,6 +1,6 @@
 ---
 name: huohou-wrap-up
-description: <MANDATORY>用户发送「收尾」「收尾并发布」，或要求提交/推送/发布/打 tag 时必须调用本 skill。</MANDATORY> 提交/推送/收尾/发布四种模式边界分明：提交默认 commit+push（明说「只提交」除外），推送只 push；收尾更新 session 日志、按需同步 README、跑基础校验、给出 commit message 草案与命令预览等 o；发布模式追加语义化版本升级、annotated tag 与推送。
+description: <MANDATORY>用户发送「收尾」「收尾并发布」，或要求提交/推送/发布/打 tag 时必须调用本 skill。</MANDATORY> 触发口令：「提交」「推送」「收尾」「收尾并发布」，及"提交吧""push 一下""发个版""打个 tag"。提交/推送/收尾/发布四种模式边界分明：提交默认 commit+push（明说「只提交」除外），推送只 push；收尾更新 session 日志、按需同步 README、跑基础校验、给出 commit message 草案与命令预览等 o；发布模式追加语义化版本升级、annotated tag 与推送。不管：提交之前的代码改动与方案讨论——那是 plan-first 和 code-review 的地盘。
 ---
 
 # wrap-up（收尾）

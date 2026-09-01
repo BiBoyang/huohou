@@ -1,6 +1,6 @@
 ---
 name: huohou-collab-mode
-description: <MANDATORY>用户发送「协作模式」或明确表达进入时调用；发送「退出协作模式」时退出。</MANDATORY> 协作模式协议入口：固定"用户实现 + 助手规划/Review"的分工，详细协议读根目录 WORKFLOW.md。本 skill 是触发器和增强层，不重复协议本体。
+description: <MANDATORY>用户发送「协作模式」或明确表达进入时调用；发送「退出协作模式」时退出。</MANDATORY> 协作模式协议入口：固定"用户实现 + 助手规划/Review"的分工，详细协议读根目录 WORKFLOW.md。本 skill 是触发器和增强层，不重复协议本体。不管：单任务的方案评审——直接用 huohou-plan-first，不必进协作模式。
 ---
 
 # collab-mode（协作模式）
