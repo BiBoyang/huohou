@@ -1,5 +1,7 @@
 # 火候（huohou）
 
+**中文** | [English](README_EN.md)
+
 个人的 AI agent skill 合集。火候：知道什么时候该等、什么时候该收、什么时候该关火——每个 skill 是一条练到成本能的工作纪律。遵循 `SKILL.md` + `references/` 的渐进加载结构。
 
 ## 安装
@@ -24,7 +26,7 @@ npx skills update -g -y
 | `huohou-plan-first` | 动手前先出方案：根因分析/候选设计、取舍、验证方式，列出待拍板决策后停下等「开干」 | 修改代码 / 实现功能 / 修 bug / 重构前强制；只读 review、解释、调研不触发 |
 | `huohou-recover-from-errors` | 报错防漂移：回锚点核对，修因不修表，三次不过即停 | 工具/命令反复报错时强制 |
 | `huohou-code-review` | 通用评审流程与纪律（提炼自 deepseek-harness），含 Ousterhout Red Flags 清单 | review PR/diff、代码评审 |
-| `huohou-wrap-up` | 提交/推送/收尾/发布链路：区分 commit 与 push，更新 session、README、校验、tag | `提交` / `推送` / `收尾` / `收尾并发布` |
+| `huohou-wrap-up` | 提交/推送/收尾/发布链路：提交默认 commit+push、推送只 push，收尾更新 session/README/校验，发布升级版本与 tag | `提交` / `推送` / `收尾` / `收尾并发布` |
 | `huohou-collab-mode` | 协作模式入口：WORKFLOW.md 协议 + 拓扑并行调度 + 证据制验收 | `协作模式` / `退出协作模式` |
 | `huohou-digest` | 研究消化：把书/源码/长文提炼成结构化学习笔记，含"知识还是习惯"的固化判断 | "帮我消化/学习/研究 X" |
 | `huohou-polish` | 写作润色：按"事实>前提>逻辑>废话>代码>边界>术语>语气"优先级动刀，保原意和个人风格；附技术文章专项清单（12 问自检）和去 AI 味诊断规则（先治结构均匀化，再清词面） | "帮我润色/看看这段文字" |
