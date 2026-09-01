@@ -1,6 +1,6 @@
 ---
 name: huohou-wrap-up
-description: <MANDATORY>用户发送「收尾」「收尾并发布」，或要求提交/推送/发布/打 tag 时必须调用本 skill。</MANDATORY> 提交/推送/收尾/发布四种模式边界分明：提交只 commit，推送只 push；收尾更新 session 日志、按需同步 README、跑基础校验、给出 commit message 草案与命令预览等 o；发布模式追加语义化版本升级、annotated tag 与推送。
+description: <MANDATORY>用户发送「收尾」「收尾并发布」，或要求提交/推送/发布/打 tag 时必须调用本 skill。</MANDATORY> 提交/推送/收尾/发布四种模式边界分明：提交默认 commit+push（明说「只提交」除外），推送只 push；收尾更新 session 日志、按需同步 README、跑基础校验、给出 commit message 草案与命令预览等 o；发布模式追加语义化版本升级、annotated tag 与推送。
 ---
 
 # wrap-up（收尾）
@@ -11,14 +11,14 @@ description: <MANDATORY>用户发送「收尾」「收尾并发布」，或要�
 
 | 口令 | 范围 |
 |---|---|
-| `提交` / `commit` | **只 commit**，不 push（用户同时明确说推送除外） |
+| `提交` / `commit` | **commit + push**（默认连带推送；用户明说"只提交 / 不推送"才止步于 commit） |
 | `推送` / `push` | **只 push 当前已提交内容**，不新增 commit |
 | `收尾` | 更新 session 日志 → 同步 README → 基础校验 → 起草 commit message，等用户 `o` 后提交；**是否 push 以用户口径为准**，未明说时在草案中明确写出 push 范围 |
 | `收尾并发布` | 在"收尾"基础上追加：语义化版本升级 → 同步版本文档 → 打 tag → 推送分支和 tag |
 
 四种模式边界清晰，不要把"提交"和"收尾并推送"混成一条链路。
 
-`提交` 和 `推送` 是窄模式：只执行 Git 细则读取、仓库上下文核对、对应 Git 闸门和目标动作；不自动更新 session、同步 README 或新增版本变更，除非用户要求"收尾"。
+`提交` 和 `推送` 是窄模式：只执行 Git 细则读取、仓库上下文核对、对应 Git 闸门和目标动作（提交 = commit + push，推送 = 仅 push）；不自动更新 session、同步 README 或新增版本变更，除非用户要求"收尾"。
 
 确认语义：
 - 用户直接说"提交吧 / commit"：视为**已授权 commit**，不再二次等 `o`；但仓库上下文核对、显式 add、staged 范围闸门、敏感文件闸门仍必须执行
