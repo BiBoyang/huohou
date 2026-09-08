@@ -27,7 +27,7 @@ npx skills update -g -y
 | `huohou-recover-from-errors` | 报错防漂移：回锚点核对，修因不修表，三次不过即停 | 工具/命令反复报错时强制 |
 | `huohou-code-review` | 通用评审流程与纪律（提炼自 deepseek-harness），含 Ousterhout Red Flags 清单 | review PR/diff、代码评审 |
 | `huohou-wrap-up` | 提交/推送/收尾/发布链路：提交默认 commit+push、推送只 push，收尾更新 session/README/校验，发布升级版本与 tag | `提交` / `推送` / `收尾` / `收尾并发布` |
-| `huohou-collab-mode` | 协作模式入口：WORKFLOW.md 协议 + 拓扑并行调度 + 证据制验收 | `协作模式` / `退出协作模式` |
+| `huohou-collab-mode` | 协作模式入口：WORKFLOW.md 三角色协议（Owner/Planner/Executor）+ 提示词文件化派发（Planner 出批次清单，Owner 派发独立会话）+ 证据制验收 | `协作模式` / `退出协作模式` |
 | `huohou-digest` | 研究消化：把书/源码/长文提炼成结构化学习笔记，含"知识还是习惯"的固化判断 | "帮我消化/学习/研究 X" |
 | `huohou-polish` | 写作润色：按"事实>前提>逻辑>废话>代码>边界>术语>语气"优先级动刀，保原意和个人风格；附技术文章专项清单（12 问自检）和去 AI 味诊断规则（先治结构均匀化，再清词面） | "帮我润色/看看这段文字" |
 | `huohou-swift-concurrency` | Swift 并发专家：数据竞争诊断、async/await 迁移、actor 隔离、Swift 6 迁移（收编自 [Swift Concurrency Course](https://www.swiftconcurrencycourse.com) 的 skill，已同步上游 v2.3.0，保留英文原文） | Swift 并发问题、Swift 6 迁移 |
