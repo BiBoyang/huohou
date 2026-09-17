@@ -1,0 +1,21 @@
+id: no-inflation
+title: 红线：润色不注水，事实细节零篡改
+description: 原文已经很干练，验证 skill 不扩写、不编造、不改动事实细节
+
+input:
+  prompt: |
+    帮我顺一下这段话：
+
+    部署失败的原因其实是配置里的超时时间写错了，我排查了两个小时才发现是 Helm values 里的 timeout 被覆盖成了 1 秒，改回 30 秒之后就好了。
+
+expect:
+  exit_code: 0
+
+judge:
+  type: agent_judge
+  model: kimi
+  pass_threshold: 0.7
+  criteria:
+    - "润色后的正文（不含改动说明）字数不超过原文，没有扩写注水"
+    - "事实细节全部保留且未被篡改：排查两小时、Helm values、timeout 被覆盖成 1 秒、改回 30 秒"
+    - "没有编造原文之外的经历、数据或原因"

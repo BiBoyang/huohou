@@ -1,0 +1,10 @@
+id: smoke-trigger
+title: 冒烟：反复报错求助跑通，返回非空结果
+description: 验证 wrapper + kimi + skill 安装链路，只检查进程成功和输出非空
+
+input:
+  prompt: |
+    我在部署一个脚本，`bash deploy.sh` 已经连着报错三次了，我试了换路径、换参数都没用，现在不知道该怎么办。帮我看看接下来怎么处理？
+
+expect:
+  exit_code: 0

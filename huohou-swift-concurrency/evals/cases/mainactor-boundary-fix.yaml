@@ -1,0 +1,70 @@
+id: mainactor-boundary-fix
+title: 典型触发：Swift 6 下 nonisolated 上下文修改 @MainActor 状态的诊断与修复
+description: Swift 6 语言模式的 SwiftPM 包内联素材，验证 skill 定位隔离边界根因、给出最小安全修复、且不滥用 @MainActor
+
+input:
+  prompt: |
+    我们的 SwiftPM 包（Swift 6 语言模式）编译报错：
+
+    Sources/ProfileFeature/ProfileViewModel.swift:24:17: error: Main actor-isolated property 'name' cannot be mutated from a nonisolated context
+
+    项目就在当前目录（Package.swift + Sources/），帮我定位原因并给出修复。
+
+context:
+  files:
+    "Package.swift": |
+      // swift-tools-version: 6.0
+      import PackageDescription
+
+      let package = Package(
+          name: "ProfileFeature",
+          platforms: [.iOS(.v17), .macOS(.v14)],
+          products: [
+              .library(name: "ProfileFeature", targets: ["ProfileFeature"])
+          ],
+          targets: [
+              .target(name: "ProfileFeature")
+          ],
+          swiftLanguageModes: [.v6]
+      )
+    "Sources/ProfileFeature/ProfileViewModel.swift": |
+      import Combine
+      import Foundation
+
+      struct Profile: Decodable {
+          let name: String
+      }
+
+      final class ProfileLoader {
+          func loadProfile() async throws -> Profile {
+              let url = URL(string: "https://api.example.com/profile")!
+              let (data, _) = try await URLSession.shared.data(from: url)
+              return try JSONDecoder().decode(Profile.self, from: data)
+          }
+      }
+
+      @MainActor
+      final class ProfileViewModel: ObservableObject {
+          @Published var name = ""
+          private let loader = ProfileLoader()
+
+          nonisolated func refresh() {
+              Task {
+                  let profile = try await loader.loadProfile()
+                  name = profile.name
+              }
+          }
+      }
+
+expect:
+  exit_code: 0
+
+judge:
+  type: agent_judge
+  model: kimi
+  pass_threshold: 0.7
+  criteria:
+    - "正确定位根因：nonisolated 的 refresh 中创建的 Task 运行在非隔离上下文，跨隔离边界修改了 @MainActor 属性 name，而不是把责任推给 URLSession、JSONDecoder 或网络层"
+    - "给出 skill 认可的最小安全修复之一：去掉 nonisolated 让 refresh 继承 @MainActor 隔离，或在更新 name 时用 await MainActor.run 跳回主 actor；修复保持原有行为（异步加载完成后更新 UI 状态）"
+    - "没有把 @MainActor 当作万能修复乱贴（例如没有给 ProfileLoader、Profile 或整个模块无脑添加 @MainActor）"
+    - "解释了隔离边界（谁在 @MainActor 上、谁不在、Task 继承了谁的隔离上下文），而不是只丢出代码不做分析"

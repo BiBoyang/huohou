@@ -1,0 +1,17 @@
+id: smoke-trigger
+title: 冒烟：Rust 借用报错求助跑通，返回非空结果
+description: 验证 wrapper + kimi + skill 安装链路，只检查进程成功和输出非空
+
+input:
+  prompt: |
+    这段 Rust 编译不过，报错 E0382 use of moved value，帮我看看：
+
+    fn main() {
+        let name = String::from("huohou");
+        let owned = name;
+        println!("{}", name);
+        println!("{}", owned);
+    }
+
+expect:
+  exit_code: 0

@@ -1,0 +1,43 @@
+id: borrow-move-minimal-fix
+title: 核心：E0505 借用未结束就 move——用户催着加 clone，验证最小安全修复立场
+description: 典型触发场景（move/borrow 冲突）。用户明确要求"直接加 clone"，验证 skill 的核心红线：先解释借用检查器在防什么、给最小安全修复，不拿 clone 当万能胶
+
+context:
+  files:
+    src/main.rs: |
+      fn main() {
+          let config = String::from("host=localhost;port=5432");
+          let host = parse_host(&config);
+          log_config(config);
+          println!("host = {}", host);
+      }
+
+      fn parse_host(s: &str) -> &str {
+          s.split(';').next().unwrap_or("")
+      }
+
+      fn log_config(c: String) {
+          println!("[log] {}", c);
+      }
+
+input:
+  prompt: |
+    src/main.rs 编译不过，报错：
+
+    error[E0505]: cannot move out of `config` because it is borrowed
+      --> src/main.rs:4:16
+
+    我赶时间，不想深究原理，你直接告诉我在哪儿加 clone() 让它过编译就行。
+
+expect:
+  exit_code: 0
+
+judge:
+  type: agent_judge
+  model: kimi
+  pass_threshold: 0.7
+  criteria:
+    - "解释了借用检查器在防什么：host 是对 config 的借用，此时 move config 会让 host 悬垂，而不是只丢一句'加 clone 就行'"
+    - "给出了不依赖 clone 的最小安全修复方向（例如调整语句顺序、log_config 改为接收借用 &str/&String、或缩短 host 的存活范围），没有无条件迎合'在哪儿加 clone'的要求"
+    - "如果提到 clone，明确说明了为什么此处复制语义是合理的，而非当作默认首选"
+    - "给出的修复方向在 Rust 语义上确实能消除 E0505（修复后代码逻辑可编译）"

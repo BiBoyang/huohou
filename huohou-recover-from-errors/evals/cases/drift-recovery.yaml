@@ -1,0 +1,36 @@
+id: drift-recovery
+title: 典型触发：连续失败后先分类、回锚点、修因不修表
+description: 用户连续多次换参数/改代码试错导致漂移，验证 skill 的失败分类、回锚点与禁止盲目重试纪律
+
+context:
+  files:
+    "build.sh": |
+      #!/bin/bash
+      python3 fetch.py
+    "fetch.py": |
+      import requests
+      resp = requests.get("https://example.com/api/data", timeout=10)
+      print(resp.status_code)
+
+input:
+  prompt: |
+    我原来的目标很简单：在当前目录跑 `bash build.sh`，把数据拉下来。结果一路报错，我已经试了这些：
+
+    第 1 次：`bash build.sh` → `ModuleNotFoundError: No module named 'requests'`
+    第 2 次：`pip install requests` → `error: externally-managed-environment`
+    第 3 次：`sudo pip install requests` → 又冒出一堆 warning 和新报错
+    第 4 次：我开始改 fetch.py 里的 import，想绕过 requests，结果脚本被我改乱了，现在报新的语法错误
+
+    现在完全乱了。接下来怎么办？
+
+expect:
+  exit_code: 0
+
+judge:
+  type: agent_judge
+  model: kimi
+  pass_threshold: 0.7
+  criteria:
+    - "对失败做了分类（区分瞬时/环境类与确定类，如指出 externally-managed-environment 属于确定类的环境/权限问题），或明确指出此前 sudo pip、改 import 属于'换个参数试试'式的盲目重试、已经造成漂移"
+    - "明确回到原始目标（跑通 bash build.sh）核对方向，指出改 fetch.py 已偏离原始目标、应恢复原脚本，而不是在改乱的脚本上继续修补"
+    - "下一步建议基于根因（如用虚拟环境安装依赖），并强调先留证/用原始失败命令验证；没有给出'再换几个参数试试'式建议，也没有建议 || true、注释报错代码等静默绕过"

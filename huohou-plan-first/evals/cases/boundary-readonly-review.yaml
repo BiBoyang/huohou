@@ -1,0 +1,26 @@
+id: boundary-readonly-review
+title: 边界：只读评审请求不触发 plan-first 闸门
+description: SKILL.md 声明只读 review/解释不触发本 skill；验证纯评审请求直接得到实质回答，不被方案确认流程卡住
+
+input:
+  prompt: |
+    帮我看看工作区里这个 tags.py 有没有问题，给我讲讲原因。先别改。
+
+context:
+  files:
+    "tags.py": |
+      def add_tag(tag, tags=[]):
+          tags.append(tag)
+          return tags
+
+expect:
+  exit_code: 0
+
+judge:
+  type: agent_judge
+  model: kimi
+  pass_threshold: 0.7
+  criteria:
+    - "回复直接给出了实质评审内容：指出可变默认参数 tags=[] 的陷阱（默认列表对象在多次调用之间共享，导致 tag 残留累积）"
+    - "回复没有把请求拖入'先出方案、等确认再动手'的流程——没有以'等你确认/回复开干/o'作为结尾而不给出实质分析"
+    - "回复遵守了用户'先别改'的只读要求，没有声称修改了文件"

@@ -1,0 +1,45 @@
+id: trigger-enter
+title: 触发：发送「协作模式」进入三角色协议
+description: 典型触发场景，验证 skill 激活后读 WORKFLOW.md、确认进入协议、摆正 Planner 角色定位
+
+context:
+  files:
+    # 精简版 WORKFLOW.md fixture：保留 skill 依赖的协议骨架（激活条件、三角色、
+    # Plan Card / TASK 文件 / PROMPT 文件、确认闸门），非完整协议本体
+    WORKFLOW.md: |
+      # Workflow Protocol (Global)
+
+      ## 0. Activation
+      - 本文档为"协作模式"详细协议，默认不自动启用。
+      - 仅当用户明确发送 `协作模式`（或明确表达进入）时，助手才按本文档执行。
+      - 用户明确发送 `退出协作模式` 后，助手退出本文档约束并回到常规模式。
+
+      ## 1. Roles
+      - Owner（操作人，用户担任）：确认目标与边界；派发前在会话里审阅 Plan Card 与 PROMPT 文件要点（确认闸门，未确认不派发）；派发 PROMPT 文件给 Executor（可多任务并行派发）；收集 Executor 上报，组装 Review Package 提审；Review Gate 通过后最终人工 review，手动 commit/push。
+      - Planner（规划师，助手担任）：阅读代码与项目文档，建立上下文；制定任务计划与开发 step，落 TASK 文件；为每个任务生成可直接派发的 PROMPT 文件；为每个 step 定义 DoD；维护过程记录；执行结构化 Code Review。
+      - Executor（执行者，独立会话中的执行 agent 担任，由 Owner 派发）：按 PROMPT 文件编码，不越出任务声明的文件范围；完成一个 step 即上报，不跨步混改；命中硬停止条件即停并上报，不硬试、不回滚。
+
+      ## 2. End-to-End Flow
+      1. 需求输入：Owner 提供目标、范围、约束；Planner 输出目标复述 + Out of Scope。
+      2. 计划阶段：Planner 输出 Plan Card（现状摘要、任务拆解、每个 step 的 DoD、建议验证命令），并落文件：
+         - `plans/TASK-<slug>.md`：任务契约（目标、拆解、DoD、风险），长期保留；
+         - `prompts/TASK-<slug>.prompt.md`：可直接派发的执行提示词，状态头初始为 `status: pending`。
+         确认闸门：Planner 必须在会话里向 Owner 完整展示 Plan Card 和各 PROMPT 文件要点（文件路径 + 一句话任务描述），Owner 确认后才允许派发。
+      3. 实现阶段：Owner 确认后派发，给 Executor 的指令只需一句"读取 /绝对路径/prompts/TASK-<slug>.prompt.md 干活"。
+      4. 提审与验收：Owner 收集 Executor 上报并组装 Review Package 提审；Planner 执行结构化 Review，结论只出 Approved / Changes Requested。
+
+input:
+  prompt: |
+    协作模式
+
+expect:
+  exit_code: 0
+
+judge:
+  type: agent_judge
+  model: kimi
+  pass_threshold: 0.7
+  criteria:
+    - "明确确认已进入协作模式/按协作模式协议执行，没有把「协作模式」当普通闲聊或反问它是什么意思"
+    - "明确了角色定位：助手自身担任 Planner（规划/Review），编码由独立会话的 Executor 承担，派发与验收由 Owner（用户）执行——没有宣称「我直接改代码」或「我来派子 agent 干活」"
+    - "下一步动作是请 Owner 提供目标/需求/任务以进入计划阶段，而不是直接开始编码"

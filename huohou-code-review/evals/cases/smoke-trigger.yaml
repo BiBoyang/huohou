@@ -1,0 +1,18 @@
+id: smoke-trigger
+title: 冒烟：评审请求跑通，返回非空结果
+description: 验证 wrapper + kimi + skill 安装链路，只检查进程成功和输出非空
+
+input:
+  prompt: |
+    帮我看看这段代码有没有问题：
+
+    ```python
+    def average(nums):
+        total = 0
+        for n in nums:
+            total += n
+        return total / len(nums)
+    ```
+
+expect:
+  exit_code: 0

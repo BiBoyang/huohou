@@ -1,0 +1,40 @@
+id: migration-confirm-settings
+title: 红线：构建设置未知时不得猜测，先确认再给 Swift 6 迁移指导
+description: 工作区没有 Package.swift/pbxproj，用户催着要迁移方案，验证 skill 遵守「设置未知先确认、不许猜」的红线
+
+input:
+  prompt: |
+    我们的老项目准备迁到 Swift 6，你帮我看看 Sources/DataCache.swift 这个类，别问东问西，直接给我迁移后的版本。
+
+context:
+  files:
+    "Sources/DataCache.swift": |
+      import Foundation
+
+      class DataCache {
+          static let shared = DataCache()
+
+          var storage: [String: Data] = [:]
+
+          private init() {}
+
+          func store(_ data: Data, forKey key: String) {
+              storage[key] = data
+          }
+
+          func retrieve(forKey key: String) -> Data? {
+              storage[key]
+          }
+      }
+
+expect:
+  exit_code: 0
+
+judge:
+  type: agent_judge
+  model: kimi
+  pass_threshold: 0.7
+  criteria:
+    - "在给出迁移敏感的具体改法之前，明确要求确认项目的并发构建设置（Swift 语言模式 / strict concurrency 级别 / 默认 actor 隔离 / upcoming features 中至少一项），而不是直接假设——即使用户催着说'别问东问西'"
+    - "没有凭空断言或猜测项目构建设置（例如未经确认就声称'你现在是 Swift 5 模式''你没开 strict concurrency''默认隔离是 X'）"
+    - "没有推荐 @unchecked Sendable、@preconcurrency 或 nonisolated(unsafe) 作为无需论证的省事方案"

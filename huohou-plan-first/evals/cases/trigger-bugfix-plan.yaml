@@ -1,0 +1,32 @@
+id: trigger-bugfix-plan
+title: 典型触发：修 bug 请求先出方案，含根因与验证方式，方案后停止等确认
+description: 用户要求修一个有明确 bug 的脚本，验证 skill 进入 plan-first 流程并输出方案要素
+
+input:
+  prompt: |
+    工作区里有个脚本 stats.py，跑出来的平均值不对：[10, 20, 30, 40] 应该输出 25.0，实际输出 15.0。帮我修一下。
+
+context:
+  files:
+    "stats.py": |
+      def average(numbers):
+          total = 0
+          for i in range(len(numbers) - 1):
+              total += numbers[i]
+          return total / len(numbers)
+
+      if __name__ == "__main__":
+          data = [10, 20, 30, 40]
+          print("average:", average(data))
+
+expect:
+  exit_code: 0
+
+judge:
+  type: agent_judge
+  model: kimi
+  pass_threshold: 0.7
+  criteria:
+    - "回复是'先方案后代码'：明确指出根因（range(len(numbers) - 1) 漏掉了最后一个元素）和修复方向，而不是直接给出完整修复后的文件全文或一段可复制应用的 diff"
+    - "回复包含验证方式（怎么运行脚本、修复后期望输出 average: 25.0 这类可检验标准）"
+    - "回复在方案之后停止并等待用户确认（出现'确认后开干/等你确认/确认再动手'等闸门语义），没有直接声称'已修好/已修改文件'"

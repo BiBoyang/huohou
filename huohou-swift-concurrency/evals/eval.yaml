@@ -1,0 +1,45 @@
+schema_version: v1alpha1
+
+environment:
+  type: none
+
+skills:
+  # Use the resolved real path: skill-up's ListSkillFiles walks the source
+  # with filepath.Walk, which does not follow a symlinked root directory.
+  - source: local_path
+    path: /Users/boyang/Desktop/源码学习/huohou/huohou-swift-concurrency
+    target: skills/huohou-swift-concurrency
+
+engine:
+  name: kimi
+  custom:
+    transport: local
+    response_format: session_result
+    timeout_seconds: 300
+    local:
+      command: python3
+      args:
+        - /Users/boyang/Desktop/源码学习/huohou/evals-shared/kimi_engine.py
+        - --input
+        - ${input_file}
+        - --output
+        - ${output_file}
+      cwd: ${workspace}
+      input_file: ${input_file}
+      output_file: ${output_file}
+
+benchmark:
+  enabled: true
+
+cases:
+  files:
+    - evals/cases/smoke-trigger.yaml
+    - evals/cases/mainactor-boundary-fix.yaml
+    - evals/cases/migration-confirm-settings.yaml
+  defaults:
+    timeout_seconds: 300
+  parallelism: 1
+
+report:
+  formats: [json, html]
+  artifacts: [transcript]

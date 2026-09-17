@@ -1,0 +1,72 @@
+id: wrapup-draft
+title: 典型触发：「收尾」走全流程——读 Git 细则、写当日 session 日志、一次性草案等 o
+description: 文档/脚本类仓库的收尾触发，验证 skill 的核心链路：读 GIT_WORKFLOW.md、按模板创建当日 session 日志、一次性给出草案与命令预览并等 o，且不直接提交
+
+input:
+  prompt: |
+    这个仓库是一个内部 JSON 格式化小工具（纯 shell 脚本，没有构建入口）。今天上午我修掉了 `--format json` 时空数组被输出成 null 的 bug，改动已经提交到当前分支了。现在按流程收尾吧。
+
+context:
+  files:
+    "README.md": |
+      # jsonfmt
+
+      内部 JSON 格式化小工具。
+
+      ## 用法
+
+      ```sh
+      ./jsonfmt.sh --format json < input.json
+      ```
+
+      参数：
+      - `--format json`：以 JSON 输出（默认）
+      - `--format text`：以纯文本输出
+    "jsonfmt.sh": |
+      #!/bin/sh
+      # jsonfmt: minimal JSON pretty-printer
+      fmt="json"
+      while [ $# -gt 0 ]; do
+        case "$1" in
+          --format) fmt="$2"; shift 2 ;;
+          *) shift ;;
+        esac
+      done
+      if [ "$fmt" = "json" ]; then
+        python3 -m json.tool
+      else
+        cat
+      fi
+    "GIT_WORKFLOW.md": |
+      # Git 细则
+
+      - commit message 格式：`<type>: <summary>`，type 只能是 feat / fix / docs / chore
+      - 一个 commit 只做一件事
+      - 禁止在 commit message 中使用 emoji
+    "sessions/SESSION-2026-09-10.md": |
+      # SESSION 2026-09-10
+
+      ## 今日完成
+      - 给 jsonfmt 增加 `--format text` 参数
+
+      ## 关键决策
+      - 保持纯 shell 实现，不引入第三方依赖
+
+      ## 遗留问题
+      - `--format json` 空数组输出 null 的 bug 待修
+  git:
+    init: true
+    checkout: feat/fix-empty-array
+
+expect:
+  exit_code: 0
+
+judge:
+  type: agent_judge
+  model: kimi
+  pass_threshold: 0.7
+  criteria:
+    - "阅读了仓库根目录的 GIT_WORKFLOW.md，且给出的 commit message 草案遵循其中约定（形如 `<type>: <summary>`，type 为 feat/fix/docs/chore 之一，且无 emoji）"
+    - "创建或更新了 sessions/ 下以运行当天日期（2026-09-17）命名的 session 日志文件 SESSION-2026-09-17.md（workspace diff 中可见新增该文件），且没有沿用或追加到旧的 SESSION-2026-09-10.md；内容记录了今日完成事项与遗留问题"
+    - "一次性给出了 commit message 草案和完整命令链路预览，并明确表示等用户回复 o（或确认）后再执行提交；整个过程中没有实际执行 git commit 或 git push（transcript 中不存在成功的提交/推送）"
+    - "命令链路预览中的 git add 是显式列出文件名，而不是 git add . 或 git add -A"

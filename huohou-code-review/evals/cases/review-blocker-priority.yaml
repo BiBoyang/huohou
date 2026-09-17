@@ -1,0 +1,137 @@
+id: review-blocker-priority
+title: 典型触发：含资源泄漏 blocker 的 diff，验证分级报告与优先级纪律
+description: PR 给 cache 加后台清理 goroutine 但无停止路径（硬性卡口「资源/注册有对应清理」），并混入复述实现的注释作风格噪音，验证 blocker 识别、证据质量、blocker 与建议分离、结尾优先级
+
+input:
+  prompt: |
+    这个 PR 给内存缓存加了后台自动清理过期条目的功能，帮我评审一下这个 diff，合并前把把关。仓库相关文件（改动后的版本）我已经放在当前目录了。
+
+    ```diff
+    --- a/cache/cache.go
+    +++ b/cache/cache.go
+    @@ -10,6 +10,7 @@ type Cache struct {
+     	mu      sync.Mutex
+     	items   map[string]entry
+    +	janitor *time.Ticker
+     }
+
+     func New() *Cache {
+     	c := &Cache{
+     		items: make(map[string]entry),
+     	}
+    +	c.janitor = time.NewTicker(time.Second)
+    +	go func() {
+    +		for range c.janitor.C {
+    +			c.deleteExpired()
+    +		}
+    +	}()
+     	return c
+     }
+    +
+    +// deleteExpired removes expired entries.
+    +func (c *Cache) deleteExpired() {
+    +	c.mu.Lock()
+    +	now := time.Now()
+    +	for k, e := range c.items {
+    +		if now.After(e.expiresAt) {
+    +			delete(c.items, k)
+    +		}
+    +	}
+    +	c.mu.Unlock()
+    +}
+    ```
+
+context:
+  files:
+    go.mod: |
+      module example.com/demo
+
+      go 1.22
+    cache/cache.go: |
+      package cache
+
+      import (
+      	"sync"
+      	"time"
+      )
+
+      type entry struct {
+      	value     string
+      	expiresAt time.Time
+      }
+
+      type Cache struct {
+      	mu      sync.Mutex
+      	items   map[string]entry
+      	janitor *time.Ticker
+      }
+
+      func New() *Cache {
+      	c := &Cache{
+      		items: make(map[string]entry),
+      	}
+      	c.janitor = time.NewTicker(time.Second)
+      	go func() {
+      		for range c.janitor.C {
+      			c.deleteExpired()
+      		}
+      	}()
+      	return c
+      }
+
+      func (c *Cache) Get(key string) (string, bool) {
+      	c.mu.Lock()
+      	defer c.mu.Unlock()
+      	e, ok := c.items[key]
+      	if !ok || time.Now().After(e.expiresAt) {
+      		return "", false
+      	}
+      	return e.value, true
+      }
+
+      func (c *Cache) Set(key, value string, ttl time.Duration) {
+      	c.mu.Lock()
+      	defer c.mu.Unlock()
+      	c.items[key] = entry{value: value, expiresAt: time.Now().Add(ttl)}
+      }
+
+      // deleteExpired removes expired entries.
+      func (c *Cache) deleteExpired() {
+      	c.mu.Lock()
+      	now := time.Now()
+      	for k, e := range c.items {
+      		if now.After(e.expiresAt) {
+      			delete(c.items, k)
+      		}
+      	}
+      	c.mu.Unlock()
+      }
+    cmd/demo/main.go: |
+      package main
+
+      import (
+      	"fmt"
+      	"time"
+
+      	"example.com/demo/cache"
+      )
+
+      func main() {
+      	c := cache.New()
+      	c.Set("token", "abc123", 5*time.Second)
+      	if v, ok := c.Get("token"); ok {
+      		fmt.Println(v)
+      	}
+      }
+
+expect:
+  exit_code: 0
+
+judge:
+  type: agent_judge
+  model: kimi
+  pass_threshold: 0.7
+  criteria:
+    - "识别出后台清理 goroutine 和 ticker 没有任何停止/释放路径这一资源泄漏（Cache 没有 Close/Stop 方法，每次调用 New 都会泄漏一个 goroutine 和一个 ticker），并将其列为 blocker 或高严重度发现，指出具体位置和触发条件"
+    - "评审报告按严重度组织，blocker/高严重度发现与普通建议明确区分，且结尾给出了最优先处理的事项或明确的处理优先级"
+    - "复述实现内容的注释（deleteExpired 上方那行 godoc）若被提及，只作为低优先级建议而非主要发现；报告没有把风格类问题放在正确性/资源问题之前"

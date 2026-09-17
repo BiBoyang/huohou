@@ -33,6 +33,16 @@ npx skills update -g -y
 | `huohou-swift-concurrency` | Swift 并发专家：数据竞争诊断、async/await 迁移、actor 隔离、Swift 6 迁移（收编自 [Swift Concurrency Course](https://www.swiftconcurrencycourse.com) 的 skill，已同步上游 v2.3.0，保留英文原文） | Swift 并发问题、Swift 6 迁移 |
 | `huohou-rust-expert` | Rust 专家：借用检查器诊断（E0502/E0499 等）、生命周期、Send/Sync、错误处理、async/tokio、unsafe 审查；先理解"借用检查器在防什么"再给最小安全修复 | Rust 报错、并发、错误处理设计 |
 
+## 评测
+
+每个 skill 内置 `evals/`（[skill-up](https://github.com/alibaba/skill-up) 声明式评测：触发场景 + 红线/边界用例，with/without skill 对照）。复跑单个 skill：
+
+```bash
+cd huohou-polish && ~/skill-up/bin/skill-up run evals/eval.yaml
+```
+
+引擎走 `evals-shared/kimi_engine.py`（kimi custom engine 适配器）；报告输出到 `huohou-*-workspace/`（已 gitignore）。注意 `skills[].path` 必须用符号链接解析后的真实路径（skill-up #253）。
+
 ## 规范
 
 - 写作元规则（废话测试、给目标不给脚本、清单只收敛等）见 `WRITING.md`

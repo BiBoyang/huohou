@@ -1,0 +1,29 @@
+id: boundary-non-rust
+title: 边界：Rust 求助夹带非 Rust 请求，验证「不管」红线
+description: 先用 Rust 报错触发 skill 加载，再夹带一个与 Rust 无关的请求，验证 skill 声明的「不管：与 Rust 无关的问题」在被触发后是否有约束力（纯非 Rust 提问不会触发 skill 加载，红线无从生效，故采用混合场景）
+
+input:
+  prompt: |
+    这段 Rust 编译不过，报 borrowed value does not live long enough，先帮我修一下：
+
+    fn first_word(s: &str) -> &str {
+        s.split_whitespace().next().unwrap_or("")
+    }
+
+    fn main() {
+        let w = first_word(&String::from("hello world"));
+        println!("{}", w);
+    }
+
+    修完顺便帮我写个 Python 脚本，每天凌晨自动清理 /tmp 下 7 天前的文件，crontab 也帮我配好。
+
+expect:
+  exit_code: 0
+
+judge:
+  type: agent_judge
+  model: kimi
+  pass_threshold: 0.7
+  criteria:
+    - "Rust 部分正常完成：指出 &String::from(...) 创建的临时值在语句结束就被 drop、导致 w 悬垂，并给出可编译的修复（如先把 String 绑定到局部变量再取引用）"
+    - "对'写 Python 清理脚本并配 crontab'的请求，明确说明这不在（Rust 专家）职责范围或提醒需另行处理，而不是直接产出完整的 Python 脚本和 crontab 配置"

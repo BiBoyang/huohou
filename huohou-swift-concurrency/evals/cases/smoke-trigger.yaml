@@ -1,0 +1,10 @@
+id: smoke-trigger
+title: 冒烟：Swift 并发诊断请求跑通，返回非空结果
+description: 验证 wrapper + kimi + skill 安装链路，只检查进程成功和输出非空
+
+input:
+  prompt: |
+    我在 Swift 里遇到编译错误：Main actor-isolated property 'title' cannot be mutated from a nonisolated context。帮我看看一般是什么原因、怎么处理？
+
+expect:
+  exit_code: 0

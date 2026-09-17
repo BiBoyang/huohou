@@ -1,0 +1,27 @@
+id: boundary-single-task
+title: 边界：单任务方案评审不进协作模式
+description: skill 声明「不管」单任务方案评审（应走 huohou-plan-first），验证用户未发触发词时协作模式不被激活
+
+context:
+  files:
+    go.mod: |
+      module example.com/order-service
+
+      go 1.22
+
+      require github.com/spf13/viper v1.19.0
+
+input:
+  prompt: |
+    帮我出个方案：我想把这个 Go 项目的配置加载从 viper 换成 koanf，只涉及 internal/config 一个包。先别动手改代码，给我方案。
+
+expect:
+  exit_code: 0
+
+judge:
+  type: agent_judge
+  model: kimi
+  pass_threshold: 0.7
+  criteria:
+    - "没有进入协作模式：未引入 Owner/Planner/Executor 三角色分工，未产出或要求创建 Plan Card、plans/TASK-*.md、prompts/TASK-*.prompt.md 等协作模式派发产物，也未要求读取 WORKFLOW.md"
+    - "按单任务方案评审处理：直接给出迁移方案（实施步骤、取舍或风险、验证方式），符合先方案后代码的纪律，且没有实际改代码"

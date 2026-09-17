@@ -1,0 +1,10 @@
+id: smoke-trigger
+title: 冒烟：润色请求跑通，返回非空结果
+description: 验证 wrapper + kimi + skill 安装链路，只检查进程成功和输出非空
+
+input:
+  prompt: |
+    帮我润色这段话：首先，我们需要对这个系统进行优化。其次，这个优化是非常重要的。最后，它能够显著地提升我们的效率。
+
+expect:
+  exit_code: 0

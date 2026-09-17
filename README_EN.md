@@ -34,6 +34,16 @@ Content line: `huohou-digest` (intake) â†’ `huohou-polish` (before publishing) â
 | `huohou-swift-concurrency` | Swift concurrency expert: data-race diagnosis, async/await migration, actor isolation, Swift 6 migration (adopted from [Swift Concurrency Course](https://www.swiftconcurrencycourse.com), synced with upstream v2.3.0, kept in English) | Swift concurrency issues, Swift 6 migration |
 | `huohou-rust-expert` | Rust expert: borrow-checker diagnostics (E0502/E0499 etc.), lifetimes, Send/Sync, error handling, async/tokio, unsafe review; understand what the borrow checker protects before applying the minimal safe fix | Rust errors, concurrency, error-handling design |
 
+## Evaluation
+
+Each skill ships an `evals/` suite ([skill-up](https://github.com/alibaba/skill-up) declarative evals: trigger scenarios plus red-line/boundary cases, with/without-skill benchmark). Re-run a single skill:
+
+```bash
+cd huohou-polish && ~/skill-up/bin/skill-up run evals/eval.yaml
+```
+
+Runs go through `evals-shared/kimi_engine.py` (Kimi custom-engine adapter); reports land in `huohou-*-workspace/` (gitignored). Note: `skills[].path` must be the symlink-resolved real path (skill-up #253).
+
 ## Conventions
 
 - Writing meta-rules (fluff test, target-not-script, lists only consolidate) live in `WRITING.md` (Chinese)
