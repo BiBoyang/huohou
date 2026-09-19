@@ -42,10 +42,27 @@ skill-up side (runtime/process management, not engine side). PR sketch, no code:
 - Alternative (smaller): when the deadline fires and no output file exists, synthesize a SessionResult with `exit_code: 124` and `stderr: "case timeout"` so downstream tooling at least has a record.
 - Touch points: `internal/agent/custom_local.go` exec path + wherever the case-level `context.WithTimeout` is enforced. Needs verification against both `local` and `http` transports.
 
-### Evidence in this repo
+### Evidence (inlined — do not depend on repo access)
 
-- `huohou-digest-triggers-workspace/iteration-1/trigger-pos-digest-repo/with_skill/outputs/agent/run/` — first-run residue: `messages.json` present, `session-result.json` absent (process was killed on the 180s deadline).
-- Same shape for `trigger-pos-digest-book` and `huohou-rust-expert .../trigger-neg-unrelated` before their clean-dir reruns.
+Console output from the failing run (2026-09-19):
+
+```console
+[ERROR] case trigger-pos-digest-repo: agent execution failed: custom engine run failed:
+context deadline exceeded (case timeout 180s via cases.defaults.timeout_seconds)
+```
+
+Post-mortem directory listing (only the input was persisted; the adapter never got to write `${output_file}`):
+
+```console
+$ ls <output-dir>/iteration-1/trigger-pos-digest-repo/with_skill/outputs/agent/run/
+messages.json
+$ # session-result.json absent — the agent's transcript (including early-turn
+$ # Skill activation events) died with the killed process
+```
+
+Same shape reproduced for two more cases (`trigger-pos-digest-book` at 180s and 300s, `trigger-neg-unrelated`) before the action-free-prompt workaround.
+
+Auxiliary (works only if the huohou repo is reachable): first-run residue under the gitignored `huohou-digest-triggers-workspace/` at `github.com/BiBoyang/huohou`.
 
 ---
 
@@ -83,6 +100,28 @@ skill-up side (runner output/iteration bookkeeping). PR sketch, no code:
 - Likely minimal fix: treat any rerun into an existing workspace as `iteration-<last+1>` (consistent with documented `--iteration 0` auto-append semantics) instead of merging into `iteration-1`.
 - Needs a regression test: run full → rerun one case → assert new session-result mtime.
 
-### Evidence in this repo
+### Evidence (inlined — do not depend on repo access)
 
-- Reproduced with `huohou-recover-from-errors`, `huohou-digest`, `huohou-rust-expert` single-case reruns on 2026-09-19 (workspace dirs under `<repo>/huohou-*-triggers-workspace/`, gitignored; clean-dir reruns preserved and merged back).
+Reproduction transcript (2026-09-19, macOS arm64, skill-up dev-fix253):
+
+```console
+$ stat -f "%m %N" .../iteration-1/trigger-pos-terse/with_skill/outputs/agent/run/session-result.json
+1789808917 .../iteration-1/trigger-pos-terse/with_skill/outputs/agent/run/session-result.json
+
+$ skill-up run evals/eval-triggers.yaml --include-case-name "trigger-pos-terse" --output-dir <same-workspace>
+📋 Results: 1 passed, 0 failed, 0 errors
+
+$ stat -f "%m %N" .../iteration-1/trigger-pos-terse/with_skill/outputs/agent/run/session-result.json
+1789808917 .../iteration-1/trigger-pos-terse/with_skill/outputs/agent/run/session-result.json
+# ^ identical mtime: the rerun reported PASS but wrote nothing for the case
+```
+
+Directory shape from the timeout variant (Issue 1 overlap — killed engine leaves a half-written case dir):
+
+```console
+$ ls <workspace>/iteration-1/trigger-pos-digest-repo/with_skill/outputs/agent/run/
+messages.json            # input only
+$ # no session-result.json — nothing downstream can grade this case
+```
+
+Auxiliary (works only if the huohou repo is reachable): the gitignored `huohou-*-triggers-workspace/` dirs under `github.com/BiBoyang/huohou`.
