@@ -1,4 +1,4 @@
-# skill-up 上游问题草稿（GitHub-ready）
+# skill-up 上游问题（已发布）
 
 > 产生于 2026-09-19 触发评测全量跑（9 skill × 10 case，kimi + claude 双 custom engine）。
 > 前置核验已完成（2026-09-19）：open issues（12 条）无重叠；closed 最近 100 条无重叠
@@ -7,7 +7,7 @@
 
 ---
 
-## Issue 1（草稿）
+## Issue 1 — 已发布为 #263
 
 **Title:** Case timeout kills custom engine before it can flush its session-result, losing all evaluation data for that case
 
@@ -66,7 +66,7 @@ Auxiliary (works only if the huohou repo is reachable): first-run residue under 
 
 ---
 
-## Issue 2（草稿）
+## Issue 2 — 已发布为 #264
 
 **Title:** Rerunning a single case with `--include-case-name` into a non-empty output workspace reports PASS but writes no fresh artifacts
 
