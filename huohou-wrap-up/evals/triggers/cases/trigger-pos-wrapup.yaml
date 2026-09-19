@@ -1,0 +1,7 @@
+id: trigger-pos-wrapup
+title: 正样本：口令「收尾」
+description: 核心口令触发面——收尾流程语义
+
+input:
+  prompt: |
+    今天的活干完了，走一下收尾流程。

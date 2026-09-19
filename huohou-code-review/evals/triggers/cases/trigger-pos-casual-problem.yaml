@@ -1,0 +1,15 @@
+id: trigger-pos-casual-problem
+title: 正样本：口语化「看看有没有问题」
+description: SKILL.md 明示的口语触发「帮我看看这段代码有没有问题」
+
+input:
+  prompt: |
+    帮我看看这段代码有没有问题：
+
+    ```python
+    def average(nums):
+        total = 0
+        for n in nums:
+            total += n
+        return total / len(nums)
+    ```

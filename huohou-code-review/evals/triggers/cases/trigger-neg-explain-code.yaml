@@ -1,0 +1,13 @@
+id: trigger-neg-explain-code
+title: 负样本（near-miss）：解释代码不应触发评审
+description: 理解类请求，输出解释而非评审报告，不激活 huohou-code-review
+
+input:
+  prompt: |
+    解释一下这段代码在干什么：
+
+    ```python
+    @lru_cache(maxsize=128)
+    def fib(n):
+        return n if n < 2 else fib(n - 1) + fib(n - 2)
+    ```

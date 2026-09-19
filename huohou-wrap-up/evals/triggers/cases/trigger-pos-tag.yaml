@@ -1,0 +1,7 @@
+id: trigger-pos-tag
+title: 正样本：「打个 tag」
+description: 打 tag 属发布链路口令，期望激活 huohou-wrap-up
+
+input:
+  prompt: |
+    给当前版本打个 tag。

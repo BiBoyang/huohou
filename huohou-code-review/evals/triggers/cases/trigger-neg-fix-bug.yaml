@@ -1,0 +1,15 @@
+id: trigger-neg-fix-bug
+title: 负样本（near-miss）：修 bug 不应触发评审
+description: 修复请求归调试/修复流程，SKILL.md 明示不管「调试报错根因」；只回答怎么修，不激活 huohou-code-review
+
+input:
+  prompt: |
+    这段代码在空输入时崩了，帮我修一下：
+
+    ```python
+    def average(nums):
+        total = 0
+        for n in nums:
+            total += n
+        return total / len(nums)
+    ```

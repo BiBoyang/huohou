@@ -1,0 +1,19 @@
+id: trigger-pos-terse
+title: 正样本（边缘）：极简「评审下这段」
+description: 边缘正例——最短触发语，考验 description 触发面下限
+
+input:
+  prompt: |
+    评审下这段：
+
+    ```rust
+    fn find_max(v: &[i32]) -> i32 {
+        let mut max = 0;
+        for &x in v {
+            if x > max {
+                max = x;
+            }
+        }
+        max
+    }
+    ```

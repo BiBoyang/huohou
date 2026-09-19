@@ -1,0 +1,7 @@
+id: trigger-pos-wrapup-casual
+title: 正样本（边缘）：口语「帮我收个尾」
+description: 口语变体的收尾请求，考验触发面泛化
+
+input:
+  prompt: |
+    帮我收个尾，今天这部分就到这了。

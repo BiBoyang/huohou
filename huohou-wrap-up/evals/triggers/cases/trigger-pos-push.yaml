@@ -1,0 +1,7 @@
+id: trigger-pos-push
+title: 正样本：「push 一下」
+description: 推送模式口令，期望激活 huohou-wrap-up
+
+input:
+  prompt: |
+    push 一下。

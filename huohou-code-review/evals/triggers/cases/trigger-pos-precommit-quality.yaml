@@ -1,0 +1,19 @@
+id: trigger-pos-precommit-quality
+title: 正样本：提交前质量检查
+description: 「检查提交质量」触发面——提交前把关语义
+
+input:
+  prompt: |
+    我准备提交这批改动了，提交前帮我检查下代码质量有没有问题。改动是给订单服务加了一个重试装饰器，核心逻辑：
+
+    ```python
+    def retry(fn, times=3):
+        def wrapper(*args, **kwargs):
+            for i in range(times):
+                try:
+                    return fn(*args, **kwargs)
+                except Exception:
+                    if i == times - 1:
+                        raise
+        return wrapper
+    ```

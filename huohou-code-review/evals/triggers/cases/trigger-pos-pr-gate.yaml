@@ -1,0 +1,16 @@
+id: trigger-pos-pr-gate
+title: 正样本：PR 改动贴出请求把关
+description: 「帮我评审一下」句式 + 决定是否合并的把关语境
+
+input:
+  prompt: |
+    这个 PR 的改动我贴给你，帮我评审一下，看完我再决定要不要合：
+
+    ```diff
+    --- a/auth/session.go
+    +++ b/auth/session.go
+    @@ -15,7 +15,7 @@ func (s *Session) Valid() bool {
+    -	return s.ExpiresAt.After(time.Now())
+    +	return s.ExpiresAt.After(time.Now()) && s.UserID != 0
+    }
+    ```

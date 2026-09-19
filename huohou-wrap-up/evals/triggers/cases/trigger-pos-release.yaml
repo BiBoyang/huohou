@@ -1,0 +1,7 @@
+id: trigger-pos-release
+title: 正样本：「发个版」
+description: 发布模式口令（收尾并发布语义），期望激活 huohou-wrap-up
+
+input:
+  prompt: |
+    这版可以了，发个版。

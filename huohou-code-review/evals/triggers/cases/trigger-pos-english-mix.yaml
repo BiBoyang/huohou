@@ -1,0 +1,16 @@
+id: trigger-pos-english-mix
+title: 正样本：中英混合「review 一下」
+description: 英文关键词 review 的触发面
+
+input:
+  prompt: |
+    review 一下这段代码：
+
+    ```go
+    func (s *Store) Get(key string) (string, bool) {
+        s.mu.Lock()
+        defer s.mu.Unlock()
+        v, ok := s.m[key]
+        return v, ok
+    }
+    ```

@@ -1,0 +1,7 @@
+id: trigger-neg-write-new
+title: 负样本（near-miss）：写新代码不应触发评审
+description: 从零写功能不是评审已有改动，不激活 huohou-code-review
+
+input:
+  prompt: |
+    帮我写一个带过期清理的内存缓存类，Python 实现，简单点就行。

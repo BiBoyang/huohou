@@ -1,0 +1,7 @@
+id: trigger-neg-plan-only
+title: 负样本（near-miss）：只要方案不收尾
+description: 方案咨询归 plan-first，不是提交/收尾执行，不激活 huohou-wrap-up
+
+input:
+  prompt: |
+    这个报错怎么修？先给我个方案，别动手改。

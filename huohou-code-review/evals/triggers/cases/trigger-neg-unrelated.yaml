@@ -1,0 +1,7 @@
+id: trigger-neg-unrelated
+title: 负样本：完全无关问题
+description: 与代码评审毫无关系的常识问答，任何代码类 skill 都不该激活
+
+input:
+  prompt: |
+    法国的首都是哪里？一句话回答。

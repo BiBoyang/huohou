@@ -1,0 +1,7 @@
+id: trigger-pos-commit
+title: 正样本：「提交一下」
+description: 提交模式口令，期望激活 huohou-wrap-up
+
+input:
+  prompt: |
+    改完了，提交一下。

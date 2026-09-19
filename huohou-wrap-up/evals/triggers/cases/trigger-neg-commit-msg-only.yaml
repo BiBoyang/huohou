@@ -1,0 +1,7 @@
+id: trigger-neg-commit-msg-only
+title: 负样本（near-miss）：只写文案不执行提交
+description: 「写 commit message 但别提交」是文案创作不是提交执行，不激活 huohou-wrap-up
+
+input:
+  prompt: |
+    帮我写个 commit message，先别提交，我看看再说。

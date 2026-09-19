@@ -1,0 +1,17 @@
+id: trigger-pos-review-diff
+title: 正样本：贴 diff 请求评审并把关
+description: 典型触发面——「评审 diff + 合并前把关」双关键词，期望激活 huohou-code-review
+
+input:
+  prompt: |
+    帮我评审一下这个 diff，合并前把把关：
+
+    ```diff
+    --- a/worker/pool.go
+    +++ b/worker/pool.go
+    @@ -20,6 +20,8 @@ func (p *Pool) Submit(t Task) {
+      	p.queue <- t
+    +	go p.drain()
+    +	p.drained = true
+    }
+    ```

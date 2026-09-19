@@ -41,7 +41,28 @@ npx skills update -g -y
 cd huohou-polish && ~/skill-up/bin/skill-up run evals/eval.yaml
 ```
 
-引擎走 `evals-shared/kimi_engine.py`（kimi custom engine 适配器）；报告输出到 `huohou-*-workspace/`（已 gitignore）。注意 `skills[].path` 必须用符号链接解析后的真实路径（skill-up #253）。
+引擎走 `evals-shared/kimi_engine.py`（kimi custom engine 适配器）或 `evals-shared/claude_engine.py`（Claude Code 适配器，per-case 隔离配置目录）；报告输出到 `huohou-*-workspace/`（已 gitignore）。注意 `skills[].path` 必须用符号链接解析后的真实路径（skill-up #253）。
+
+### 触发评测（该不该触发，区别于跑得对不对）
+
+code-review 与 wrap-up 各配 10 条触发用例（`evals/triggers/cases/`，6 正 4 负含 near-miss），9 skill 全装模拟真实路由。跑法（kimi 或 claude）：
+
+```bash
+cd huohou-code-review && ~/skill-up/bin/skill-up run evals/eval-triggers.yaml
+python3 ../evals-shared/trigger_report.py ../huohou-code-review-triggers-workspace --skill huohou-code-review
+```
+
+从 transcript 的原生 `Skill` 工具调用判激活（两引擎同构，判活工具零改动），输出混淆矩阵与 P/R/F1。
+
+### 伴生工具（evals-shared/）
+
+| 工具 | 作用 |
+|---|---|
+| `lint_skill.py` | SKILL.md 静态检查（frontmatter/name/长度/引用文件/密钥），CI 每次 push 运行 |
+| `selftest.py` + `fixtures/bad-skill/` | 评测器自身的回归测试（已知坏样本必须仍被抓出） |
+| `trigger_report.py` | 触发激活判活 + P/R/F1 |
+| `flaky.py` | Flaky Rate（PASS/FAIL 摇摆）与 Error Rate 分账 |
+| `delta.py` | skill lift + 延迟/token 增量（kimi 无 usage 时降级为长度代理） |
 
 ## 规范
 

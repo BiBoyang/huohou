@@ -61,9 +61,18 @@ def build_prompt(messages):
 
 
 def parse_stream_json(stdout):
-    """Return (final_message, transcript_tail) from kimi stream-json output."""
+    """Return (final_message, legacy_events, structured_events) from kimi output.
+
+    structured_events use skill-up's native transcript shape: assistant text,
+    tool_call (with tool name + parsed arguments), tool_result (paired by
+    call_id). Skill activation is detectable from tool_call.name == "Skill"
+    and its arguments.skill — kimi emits this natively, no probing needed.
+    legacy_events keep the original flat role/content view so existing
+    agent_judge prompts see an unchanged transcript.
+    """
     final = ""
     events = []
+    structured = []
     for line in stdout.splitlines():
         line = line.strip()
         if not line.startswith("{"):
@@ -73,12 +82,39 @@ def parse_stream_json(stdout):
         except json.JSONDecodeError:
             continue
         role = ev.get("role")
-        if role == "assistant" and ev.get("content"):
-            final = ev["content"]
-            events.append({"role": "assistant", "content": ev["content"]})
+        if role == "assistant":
+            for tc in ev.get("tool_calls") or []:
+                fn = tc.get("function") or {}
+                raw_args = fn.get("arguments")
+                if isinstance(raw_args, str):
+                    try:
+                        raw_args = json.loads(raw_args)
+                    except json.JSONDecodeError:
+                        raw_args = {"_raw": raw_args}
+                structured.append({
+                    "role": "tool_call",
+                    "tool_call": {
+                        "id": tc.get("id", ""),
+                        "name": fn.get("name", ""),
+                        "arguments": raw_args or {},
+                    },
+                })
+            if ev.get("content"):
+                final = ev["content"]
+                events.append({"role": "assistant", "content": ev["content"]})
+                structured.append({"role": "assistant", "content": ev["content"]})
         elif role == "tool":
             events.append({"role": "tool", "content": ev.get("content", "")})
-    return final, events
+            structured.append({
+                "role": "tool_result",
+                "tool_result": {
+                    "call_id": ev.get("tool_call_id", ""),
+                    "content": ev.get("content", ""),
+                },
+            })
+        # role == "meta" (system.version, session.resume_hint): not part of
+        # the conversation; skip.
+    return final, events, structured
 
 
 def main():
@@ -126,7 +162,7 @@ def main():
             stdout = stdout.decode("utf-8", "replace")
         stderr = f"kimi timed out after {timeout}s"
 
-    final_message, events = parse_stream_json(stdout)
+    final_message, events, structured = parse_stream_json(stdout)
     if not final_message:
         final_message = stdout.strip()
     result = {
@@ -134,7 +170,9 @@ def main():
         "final_message": final_message,
         "stderr": stderr[-MAX_STDERR_CHARS:],
         "duration_ms": int((time.time() - started) * 1000),
-        "transcript": messages + events,
+        # Structured events first-class (tool_call/tool_result with names and
+        # arguments); the flat view is kept for judge-prompt compatibility.
+        "transcript": messages + structured,
     }
 
     out_dir = os.path.dirname(args.output)

@@ -1,0 +1,7 @@
+id: trigger-neg-unrelated
+title: 负样本：完全无关问题
+description: 与收尾/提交/发布无关的日常问答，不应激活任何流程类 skill
+
+input:
+  prompt: |
+    推荐几本 Rust 入门书，一两句话说明理由就行。

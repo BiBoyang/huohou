@@ -1,3 +1,4 @@
 node_modules/
 .DS_Store
 huohou-*-workspace/
+evals-shared/__pycache__/

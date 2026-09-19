@@ -1,0 +1,7 @@
+id: trigger-neg-git-knowledge
+title: 负样本（near-miss）：git 知识问答
+description: 问 git 概念不是执行 git 操作，不激活 huohou-wrap-up
+
+input:
+  prompt: |
+    git rebase 和 git merge 有什么区别？分别什么时候用？
