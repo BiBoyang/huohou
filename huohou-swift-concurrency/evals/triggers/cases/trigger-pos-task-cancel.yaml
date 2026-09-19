@@ -1,0 +1,7 @@
+id: trigger-pos-task-cancel
+title: 正样本：Task 取消语义
+description: 并发语义问题
+
+input:
+  prompt: |
+    Task 取消后里面的 URLSession 请求没有停下来，cancellation cooperative 怎么写对？

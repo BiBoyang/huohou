@@ -1,0 +1,7 @@
+id: trigger-pos-send-sync
+title: 正样本：Send/Sync 约束
+description: 并发约束触发面
+
+input:
+  prompt: |
+    我的类型在线程间传递时报 Send 不满足，怎么排查？

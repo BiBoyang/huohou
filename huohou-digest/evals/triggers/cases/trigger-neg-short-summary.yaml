@@ -1,0 +1,7 @@
+id: trigger-neg-short-summary
+title: 负样本（near-miss）：单篇短文摘要
+description: 短文摘要直接做，不进消化流程
+
+input:
+  prompt: |
+    帮我总结一下这封邮件写了什么：明天上午十点开站会，请准时参加。

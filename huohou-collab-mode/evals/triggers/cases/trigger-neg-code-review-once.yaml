@@ -1,0 +1,7 @@
+id: trigger-neg-code-review-once
+title: 负样本（near-miss）：单次代码 review
+description: 临时 review 仅当次生效
+
+input:
+  prompt: |
+    帮我 review 一下这个改动，就这一次，不用走什么流程。

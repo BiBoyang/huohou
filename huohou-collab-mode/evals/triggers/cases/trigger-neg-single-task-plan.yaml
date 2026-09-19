@@ -1,0 +1,7 @@
+id: trigger-neg-single-task-plan
+title: 负样本（near-miss）：单任务计划拆解不进协作模式
+description: 临时要求计划拆解仅当次生效，不启用协议
+
+input:
+  prompt: |
+    这个任务帮我做个计划拆解，列一下步骤就行。

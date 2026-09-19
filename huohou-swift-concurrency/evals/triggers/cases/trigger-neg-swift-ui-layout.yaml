@@ -1,0 +1,7 @@
+id: trigger-neg-swift-ui-layout
+title: 负样本（near-miss）：SwiftUI 布局问题
+description: 非并发 Swift 问题
+
+input:
+  prompt: |
+    SwiftUI 的 List 在 iPad 上布局错乱了，怎么调？

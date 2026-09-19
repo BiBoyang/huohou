@@ -1,0 +1,7 @@
+id: trigger-pos-terse
+title: 正样本（边缘）：极简报错粘贴
+description: 最短触发语
+
+input:
+  prompt: |
+    E0499 cannot borrow as mutable more than once at a time，怎么解？

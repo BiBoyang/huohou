@@ -1,0 +1,7 @@
+id: trigger-pos-async-migration
+title: 正样本：回调转 async/await
+description: 迁移触发面
+
+input:
+  prompt: |
+    把这个 completion handler 风格的网络层迁移到 async/await。

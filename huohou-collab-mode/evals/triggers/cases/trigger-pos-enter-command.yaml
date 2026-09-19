@@ -1,0 +1,7 @@
+id: trigger-pos-enter-command
+title: 正样本：口令「协作模式」
+description: 核心口令触发
+
+input:
+  prompt: |
+    协作模式

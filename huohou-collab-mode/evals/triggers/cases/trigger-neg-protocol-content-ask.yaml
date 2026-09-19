@@ -1,0 +1,7 @@
+id: trigger-neg-protocol-content-ask
+title: 负样本：协议内容询问不进协议
+description: 按 AGENTS.md 第 6 条，协作模式需明确口令进入；内容询问本就不应触发协议激活。验收：答对问题、可读文档、不进协议。Read 次级证据保留为影子使用信号，不作 recall 减免
+
+input:
+  prompt: |
+    给我讲讲 Owner、Planner、Executor 三角色是怎么配合的？

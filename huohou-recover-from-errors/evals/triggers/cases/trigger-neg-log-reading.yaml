@@ -1,0 +1,7 @@
+id: trigger-neg-log-reading
+title: 负样本（near-miss）：读日志找根因
+description: 单次诊断
+
+input:
+  prompt: |
+    帮我从这份日志里找一下 500 错误的根因。

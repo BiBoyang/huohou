@@ -1,0 +1,7 @@
+id: trigger-pos-clippy
+title: 正样本：clippy 警告
+description: clippy 触发面
+
+input:
+  prompt: |
+    clippy 报了一堆 needless_return 和 clone_on_copy，怎么优雅地修？

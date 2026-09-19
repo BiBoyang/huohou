@@ -1,0 +1,7 @@
+id: trigger-neg-unrelated
+title: 负样本：完全无关
+description: 闲聊
+
+input:
+  prompt: |
+    今天适合跑步吗？

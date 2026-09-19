@@ -1,0 +1,7 @@
+id: trigger-pos-exit-command
+title: 正样本：口令「退出协作模式」
+description: 退出也是本 skill 触发面
+
+input:
+  prompt: |
+    退出协作模式

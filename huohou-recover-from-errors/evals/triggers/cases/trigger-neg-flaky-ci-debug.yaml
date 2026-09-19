@@ -1,0 +1,7 @@
+id: trigger-neg-flaky-ci-debug
+title: 负样本（near-miss）：CI 时过时不过的排查请求
+description: 类比语境——CI flaky 是人的工作流问题，不是 agent 执行中卡顿的防漂移场景，不应吸进 huohou-recover-from-errors
+
+input:
+  prompt: |
+    这个 CI 任务有时绿有时红，同样的代码跑十次挂四次，帮我排查一下是不是哪里漂了。

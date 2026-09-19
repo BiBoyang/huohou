@@ -1,0 +1,7 @@
+id: trigger-pos-digest-longform
+title: 正样本：消化一篇长文
+description: 长文触发面
+
+input:
+  prompt: |
+    把这篇关于 Agent 评测的长文整理成笔记，提炼核心框架。

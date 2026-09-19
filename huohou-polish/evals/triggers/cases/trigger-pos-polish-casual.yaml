@@ -1,0 +1,9 @@
+id: trigger-pos-polish-casual
+title: 正样本：口语「顺一下」
+description: 口语触发面
+
+input:
+  prompt: |
+    顺一下这段话，读起来有点别扭：
+    
+    我们团队经过长时间的努力，终于在这个问题上取得了突破性的进展。

@@ -1,0 +1,7 @@
+id: trigger-pos-terse
+title: 正样本（边缘）：极简「进协作」
+description: 最短触发语
+
+input:
+  prompt: |
+    进协作模式。

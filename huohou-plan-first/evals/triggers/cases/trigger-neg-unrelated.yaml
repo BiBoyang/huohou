@@ -1,0 +1,7 @@
+id: trigger-neg-unrelated
+title: 负样本：完全无关
+description: 闲聊
+
+input:
+  prompt: |
+    Rust 和 Go 哪个更适合写后端？聊聊。

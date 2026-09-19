@@ -1,0 +1,7 @@
+id: trigger-neg-write-from-scratch
+title: 负样本（near-miss）：从零写作
+description: SKILL.md 明示不管从零写作
+
+input:
+  prompt: |
+    帮我写一篇关于程序员健康的公众号文章，800 字。

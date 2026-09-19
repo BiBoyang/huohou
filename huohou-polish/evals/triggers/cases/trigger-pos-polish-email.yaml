@@ -1,0 +1,9 @@
+id: trigger-pos-polish-email
+title: 正样本：润色邮件
+description: 邮件场景
+
+input:
+  prompt: |
+    帮我看看这封邮件的措辞有没有问题，润色一下：
+    
+    李总您好，附件是合同，请查收，有问题联系我。

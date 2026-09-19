@@ -1,0 +1,7 @@
+id: trigger-pos-borrow-error
+title: 正样本：借用检查器报错
+description: 核心触发面 E0502
+
+input:
+  prompt: |
+    这段 Rust 代码报 E0502 cannot borrow as mutable because it is also borrowed as immutable，帮我看看怎么修。

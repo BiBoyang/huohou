@@ -1,0 +1,7 @@
+id: trigger-pos-terse
+title: 正样本（边缘）：极简「加个功能」
+description: 最短触发语
+
+input:
+  prompt: |
+    加个命令行参数校验。

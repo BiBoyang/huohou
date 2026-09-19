@@ -1,0 +1,7 @@
+id: trigger-neg-error-meaning
+title: 负样本（near-miss）：问错误含义
+description: 概念解释
+
+input:
+  prompt: |
+    E0502 这个错误码是什么意思？

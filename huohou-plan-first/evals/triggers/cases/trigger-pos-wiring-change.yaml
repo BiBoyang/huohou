@@ -1,0 +1,7 @@
+id: trigger-pos-wiring-change
+title: 正样本：改配置接线
+description: 配置改动也是代码修改
+
+input:
+  prompt: |
+    把日志输出从 console 换成滚动文件，接进现有初始化流程。

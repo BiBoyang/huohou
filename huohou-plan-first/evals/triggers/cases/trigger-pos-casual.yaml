@@ -1,0 +1,7 @@
+id: trigger-pos-casual
+title: 正样本：口语化「帮我改」
+description: 口语变体
+
+input:
+  prompt: |
+    这块代码看着不太对，帮我改改。

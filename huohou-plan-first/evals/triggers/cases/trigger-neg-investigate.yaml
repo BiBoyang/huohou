@@ -1,0 +1,7 @@
+id: trigger-neg-investigate
+title: 负样本（near-miss）：纯调研
+description: 调研不动工作树
+
+input:
+  prompt: |
+    调研一下现在主流的 WebSocket 库都有哪些，各有什么优缺点。

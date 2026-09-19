@@ -1,0 +1,7 @@
+id: trigger-neg-explain
+title: 负样本（near-miss）：解释代码
+description: 理解类请求
+
+input:
+  prompt: |
+    解释一下这段正则在匹配什么。

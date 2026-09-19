@@ -1,0 +1,7 @@
+id: trigger-pos-stuck-loop
+title: 正样本：执行卡住打转
+description: 卡顿触发面
+
+input:
+  prompt: |
+    agent 在删一个不存在的文件和重建之间来回打转，已经十几轮了，怎么让它停下来纠正？

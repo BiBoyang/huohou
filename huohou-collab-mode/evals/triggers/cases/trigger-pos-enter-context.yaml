@@ -1,0 +1,7 @@
+id: trigger-pos-enter-context
+title: 正样本：带任务背景的进入请求
+description: 语境化进入
+
+input:
+  prompt: |
+    下个迭代要重构支付模块，咱们用协作模式来推进吧。

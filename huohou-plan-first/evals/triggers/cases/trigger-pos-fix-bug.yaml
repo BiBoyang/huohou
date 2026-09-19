@@ -1,0 +1,7 @@
+id: trigger-pos-fix-bug
+title: 正样本：修 bug
+description: 修复请求先出方案
+
+input:
+  prompt: |
+    这个函数在并发调用时会丢数据，帮我修一下。

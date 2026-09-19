@@ -1,0 +1,7 @@
+id: trigger-pos-implement-feature
+title: 正样本：实现新功能
+description: 核心触发面
+
+input:
+  prompt: |
+    给我的 CLI 工具加一个配置文件热重载功能。

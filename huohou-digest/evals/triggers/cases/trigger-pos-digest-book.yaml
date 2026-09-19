@@ -1,0 +1,9 @@
+id: trigger-pos-digest-book
+title: 正样本：消化一本书
+description: 核心触发面
+
+input:
+  prompt: |
+    我想系统消化《Designing Data-Intensive Applications》这本书，你会怎么安排「整理成结构化笔记」这件事？说说你的流程。
+
+timeout_seconds: 300

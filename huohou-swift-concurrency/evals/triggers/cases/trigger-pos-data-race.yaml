@@ -1,0 +1,7 @@
+id: trigger-pos-data-race
+title: 正样本：数据竞争诊断
+description: 核心触发面
+
+input:
+  prompt: |
+    这段 Swift 代码在多线程访问一个 var 属性，怀疑有数据竞争，帮我诊断。

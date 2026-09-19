@@ -1,0 +1,7 @@
+id: trigger-neg-objc
+title: 负样本（near-miss）：Objective-C 问题
+description: 非 Swift
+
+input:
+  prompt: |
+    这段 Objective-C 的 delegate 没被回调，帮我排查。

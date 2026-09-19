@@ -44,39 +44,74 @@ def activated_skills(session_result):
     return names
 
 
-def collect_latest_by_case(run_dir):
-    """Map case_id -> session-result path, preferring with_skill and mtime."""
-    by_case = {}
-    for path in glob.glob(os.path.join(run_dir, "**", "session-result.json"), recursive=True):
-        parent = os.path.basename(os.path.dirname(path))          # run dir name
-        case_dir = os.path.dirname(os.path.dirname(path))
-        # Layout: <case>/<config>/outputs/agent/run/session-result.json
-        # or      <iteration>/<case>/<config>/outputs/agent/run/...
-        config = parent  # "run"; config dir is one level above outputs
-        segs = path.split(os.sep)
-        try:
-            cfg_idx = len(segs) - 1 - segs[::-1].index("outputs") - 1
-            cfg_name = segs[cfg_idx]
-        except ValueError:
+def read_skill_file(session_result, skill):
+    """True if the agent Read skills/<skill>/SKILL.md directly (bypassing the
+    Skill tool). Both engines do this on protocol-content questions — it is
+    substantive activation evidence, reported separately, never counted as
+    protocol activation."""
+    marker = f"skills/{skill}/SKILL.md"
+    for msg in session_result.get("transcript") or []:
+        tc = msg.get("tool_call")
+        if not tc:
             continue
-        if "without_skill" in cfg_name:
-            continue  # trigger evals are with_skill-only by design
-        case_id = segs[cfg_idx - 1]
+        if tc.get("name") == "Read":
+            args = tc.get("arguments") or {}
+            path = str(args.get("file_path") or args.get("path") or "")
+            if marker in path:
+                return True
+    return False
+
+
+def collect_latest_by_case(run_dir):
+    """Map case_id -> session-result path, preferring with_skill and mtime.
+    Also returns case dirs that exist without any session-result (e.g.
+    timeout-killed runs) so exclusion is never silent."""
+    by_case = {}
+    no_result = set()
+    for case_dir in glob.glob(os.path.join(run_dir, "**", "trigger-*"), recursive=True):
+        if not os.path.isdir(case_dir):
+            continue
+        segs = case_dir.split(os.sep)
+        case_id = segs[-1]
+        # only count dirs laid out as <...>/<case>/<config>/outputs/...
+        configs = glob.glob(os.path.join(case_dir, "*", "outputs"))
+        if not configs:
+            continue
+        results = glob.glob(os.path.join(case_dir, "*", "outputs", "agent", "run", "session-result.json"))
+        if not results:
+            no_result.add(case_id)
+            continue
+        # prefer with_skill arm when present (trigger evals are with_skill-only)
+        with_skill = [p for p in results if "with_skill" in p]
+        pool = with_skill or results
+        path = max(pool, key=os.path.getmtime)
         mtime = os.path.getmtime(path)
         prev = by_case.get(case_id)
         if prev is None or mtime > prev[0]:
             by_case[case_id] = (mtime, path)
-    return {cid: p for cid, (_, p) in by_case.items()}
+    return {cid: p for cid, (_, p) in by_case.items()}, no_result
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("run_dir", help="skill-up output dir (single run or iteration-N)")
+    parser.add_argument("run_dirs", nargs="+",
+                        help="skill-up output dir(s) — single run or iteration-N; "
+                             "same case in multiple dirs resolves to the newest")
     parser.add_argument("--skill", required=True, help="target skill name, e.g. huohou-code-review")
     parser.add_argument("--json", action="store_true", help="emit machine-readable JSON only")
     args = parser.parse_args()
 
-    cases = collect_latest_by_case(args.run_dir)
+    cases = {}
+    excluded = set()
+    for run_dir in args.run_dirs:
+        found, no_result = collect_latest_by_case(run_dir)
+        excluded |= no_result
+        for cid, path in found.items():
+            mtime = os.path.getmtime(path)
+            prev = cases.get(cid)
+            if prev is None or mtime > prev[0]:
+                cases[cid] = (mtime, path)
+    cases = {cid: p for cid, (_, p) in cases.items()}
     if not cases:
         print(f"no session-result.json found under {args.run_dir}", file=sys.stderr)
         return 2
@@ -98,6 +133,7 @@ def main():
             "should_trigger": should,
             "activated": args.skill in activated,
             "activated_skills": activated,
+            "read_skill_file": read_skill_file(result, args.skill),
             "exit_code": result.get("exit_code"),
             "path": cases[case_id],
         })
@@ -112,7 +148,8 @@ def main():
 
     if args.json:
         print(json.dumps({
-            "skill": args.skill, "run_dir": args.run_dir,
+            "skill": args.skill, "run_dirs": args.run_dirs,
+            "excluded_no_result": sorted(excluded),
             "confusion": {"tp": tp, "fp": fp, "fn": fn, "tn": tn},
             "precision": round(precision, 4), "recall": round(recall, 4), "f1": round(f1, 4),
             "rows": rows, "unlabeled": unlabeled,
@@ -123,6 +160,9 @@ def main():
     print(f"Cases: {len(rows)} labeled, {len(unlabeled)} unlabeled (skipped)")
     if unlabeled:
         print("  unlabeled:", ", ".join(unlabeled))
+    if excluded:
+        print(f"EXCLUDED: {len(excluded)} case(s) without session-result (timeout-killed): "
+              + ", ".join(sorted(excluded)))
     print(f"\nConfusion: TP={tp} FP={fp} FN={fn} TN={tn}")
     print(f"Precision={precision:.3f}  Recall={recall:.3f}  F1={f1:.3f}\n")
     for r in rows:
@@ -130,6 +170,8 @@ def main():
         expect = "should" if r["should_trigger"] else "should-not"
         others = [s for s in r["activated_skills"] if s != args.skill]
         note = f" (routed to: {', '.join(others)})" if others else ""
+        if r["read_skill_file"]:
+            note += " [read skill file directly — substantive, not protocol activation]"
         print(f"  [{verdict}] {r['case_id']}: {expect}, activated={r['activated']}{note}")
     return 0
 

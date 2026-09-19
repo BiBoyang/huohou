@@ -1,0 +1,7 @@
+id: trigger-neg-cargo-config
+title: 负样本（near-miss）：工程配置科普
+description: 概念性配置问答
+
+input:
+  prompt: |
+    Cargo.toml 里 workspace 和 package 的区别是什么？

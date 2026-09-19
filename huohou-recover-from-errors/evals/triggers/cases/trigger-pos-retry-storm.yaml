@@ -1,0 +1,7 @@
+id: trigger-pos-retry-storm
+title: 正样本：重试风暴
+description: 反复失败语境
+
+input:
+  prompt: |
+    部署脚本每次都在健康检查这步失败，重试了七八次都过不去。

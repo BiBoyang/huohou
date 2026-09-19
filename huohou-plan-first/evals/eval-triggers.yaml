@@ -1,0 +1,79 @@
+schema_version: v1alpha1
+
+environment:
+  type: none
+
+# All 9 skills installed, mirroring the real ~/.agents/skills routing scene:
+# near-miss negatives may rightly route to a sibling skill; the target skill
+# (this directory's) activation is what trigger_report.py measures.
+skills:
+  - source: local_path
+    path: /Users/boyang/Desktop/源码学习/huohou/huohou-code-review
+    target: skills/huohou-code-review
+  - source: local_path
+    path: /Users/boyang/Desktop/源码学习/huohou/huohou-collab-mode
+    target: skills/huohou-collab-mode
+  - source: local_path
+    path: /Users/boyang/Desktop/源码学习/huohou/huohou-digest
+    target: skills/huohou-digest
+  - source: local_path
+    path: /Users/boyang/Desktop/源码学习/huohou/huohou-plan-first
+    target: skills/huohou-plan-first
+  - source: local_path
+    path: /Users/boyang/Desktop/源码学习/huohou/huohou-polish
+    target: skills/huohou-polish
+  - source: local_path
+    path: /Users/boyang/Desktop/源码学习/huohou/huohou-recover-from-errors
+    target: skills/huohou-recover-from-errors
+  - source: local_path
+    path: /Users/boyang/Desktop/源码学习/huohou/huohou-rust-expert
+    target: skills/huohou-rust-expert
+  - source: local_path
+    path: /Users/boyang/Desktop/源码学习/huohou/huohou-swift-concurrency
+    target: skills/huohou-swift-concurrency
+  - source: local_path
+    path: /Users/boyang/Desktop/源码学习/huohou/huohou-wrap-up
+    target: skills/huohou-wrap-up
+
+engine:
+  name: kimi
+  custom:
+    transport: local
+    response_format: session_result
+    timeout_seconds: 180
+    local:
+      command: python3
+      args:
+        - /Users/boyang/Desktop/源码学习/huohou/evals-shared/kimi_engine.py
+        - --input
+        - ${input_file}
+        - --output
+        - ${output_file}
+      cwd: ${workspace}
+      input_file: ${input_file}
+      output_file: ${output_file}
+
+# Trigger evals measure activation only (with_skill arm); the without_skill
+# benchmark arm is meaningless here and would double the API cost.
+benchmark:
+  enabled: false
+
+cases:
+  files:
+    - evals/triggers/cases/trigger-pos-implement-feature.yaml
+    - evals/triggers/cases/trigger-pos-fix-bug.yaml
+    - evals/triggers/cases/trigger-pos-refactor.yaml
+    - evals/triggers/cases/trigger-pos-wiring-change.yaml
+    - evals/triggers/cases/trigger-pos-casual.yaml
+    - evals/triggers/cases/trigger-pos-terse.yaml
+    - evals/triggers/cases/trigger-neg-readonly-review.yaml
+    - evals/triggers/cases/trigger-neg-explain.yaml
+    - evals/triggers/cases/trigger-neg-investigate.yaml
+    - evals/triggers/cases/trigger-neg-unrelated.yaml
+  defaults:
+    timeout_seconds: 180
+  parallelism: 1
+
+report:
+  formats: [json]
+  artifacts: [transcript]

@@ -1,0 +1,9 @@
+id: trigger-pos-deai-flavor
+title: 正样本：去 AI 味
+description: 去 AI 味触发面
+
+input:
+  prompt: |
+    这段文字 AI 味太重了，帮我改得像人写的：
+    
+    综上所述，我们可以清晰地看到，该方案具有显著的优势和深远的意义。

@@ -1,0 +1,10 @@
+id: trigger-pos-digest-repo
+title: 正样本：消化一个源码仓库
+description: 源码学习触发面
+
+input:
+  prompt: |
+    假设我已经把 tokio 仓库 clone 到本地了，你会怎么安排「把核心模块整理成学习笔记」这件事？说说你的流程。
+
+# heavy task: digesting a repo makes the agent do real work; needs more headroom
+timeout_seconds: 420

@@ -1,0 +1,7 @@
+id: trigger-pos-drift-suspect
+title: 正样本：怀疑跑偏
+description: 防漂移咨询
+
+input:
+  prompt: |
+    这个修复任务跑着跑着开始改不相关的文件了，我怀疑它偏航了，怎么判断和纠正？

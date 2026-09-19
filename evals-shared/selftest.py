@@ -84,6 +84,20 @@ def test_activation_detection():
     check("activation: string-encoded arguments tolerated",
           "huohou-x" in trigger_report.activated_skills(str_args))
 
+    read_path = {"transcript": [
+        # engine read the SKILL.md directly instead of calling the Skill tool
+        {"role": "tool_call", "tool_call": {"name": "Read",
+                                            "arguments": {"file_path": "/ws/skills/huohou-x/SKILL.md"}}},
+    ]}
+    read_other = {"transcript": [
+        {"role": "tool_call", "tool_call": {"name": "Read",
+                                            "arguments": {"file_path": "/ws/skills/huohou-x/references/a.md"}}},
+    ]}
+    check("substantive: direct Read of skills/<target>/SKILL.md detected",
+          trigger_report.read_skill_file(read_path, "huohou-x"))
+    check("substantive: Read of other files not misread as SKILL.md access",
+          not trigger_report.read_skill_file(read_other, "huohou-x"))
+
 
 def test_flaky_ledgers():
     tmp = Path(tempfile.mkdtemp(prefix="flaky-selftest-"))
@@ -166,6 +180,53 @@ def test_claude_eval_home_cleanup_on_crash():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def test_rubric_read_is_shadow_not_activation():
+    """Rubric definition, executable: a Read of skills/<t>/SKILL.md is a
+    shadow-use signal only — it must NOT count as protocol activation nor
+    reduce recall (an unlabeled-Read positive stays an FN)."""
+    import subprocess as sp
+    tmp = Path(tempfile.mkdtemp(prefix="rubric-selftest-"))
+    try:
+        d = tmp / "run" / "trigger-pos-readonly" / "with_skill" / "outputs" / "agent" / "run"
+        d.mkdir(parents=True)
+        json.dump({"exit_code": 0, "transcript": [
+            {"role": "tool_call", "tool_call": {"name": "Read",
+             "arguments": {"path": "skills/huohou-x/SKILL.md"}}},
+            {"role": "assistant", "content": "answered from the doc"},
+        ]}, open(d / "session-result.json", "w"))
+        proc = sp.run([sys.executable, str(Path(trigger_report.__file__)),
+                       str(tmp / "run"), "--skill", "huohou-x", "--json"],
+                      capture_output=True, text=True)
+        out = json.loads(proc.stdout)
+        row = out["rows"][0]
+        check("rubric: Read path is not protocol activation", row["activated"] is False)
+        check("rubric: Read path lights the shadow signal", row["read_skill_file"] is True)
+        check("rubric: Read path gives no recall relief (still FN)",
+              out["confusion"] == {"tp": 0, "fp": 0, "fn": 1, "tn": 0},
+              str(out["confusion"]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def test_claude_config_invariant():
+    """Every eval-triggers-claude.yaml must differ from its kimi twin ONLY in
+    the engine name and adapter path lines — anything else is config drift
+    (first catch: a stale case list after a relabel)."""
+    import difflib
+    repo = FIXTURES.parent.parent
+    allowed = ("name: kimi", "name: claude", "kimi_engine.py", "claude_engine.py")
+    claude_cfgs = sorted(repo.glob("huohou-*/evals/eval-triggers-claude.yaml"))
+    check("config invariant: claude configs exist", len(claude_cfgs) >= 4,
+          f"found {len(claude_cfgs)}")
+    for cfg in claude_cfgs:
+        kimi_cfg = cfg.with_name("eval-triggers.yaml")
+        diff_lines = [l for l in difflib.unified_diff(
+            kimi_cfg.read_text().splitlines(), cfg.read_text().splitlines(), lineterm="")
+            if l[:1] in "<>" and not any(a in l for a in allowed)]
+        check(f"config invariant: {cfg.parent.parent.name}", not diff_lines,
+              "; ".join(diff_lines[:3]))
+
+
 def main():
     print("lint fixture assertions:")
     test_lint_fixture()
@@ -175,6 +236,10 @@ def main():
     test_flaky_ledgers()
     print("claude credential-cleanup assertions:")
     test_claude_eval_home_cleanup_on_crash()
+    print("rubric (shadow-use) assertions:")
+    test_rubric_read_is_shadow_not_activation()
+    print("claude config invariant assertions:")
+    test_claude_config_invariant()
     failed = [r for r in RESULTS if not r[1]]
     print(f"\n{len(RESULTS) - len(failed)}/{len(RESULTS)} assertions passed")
     if failed:

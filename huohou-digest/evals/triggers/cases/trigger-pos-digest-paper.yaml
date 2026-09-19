@@ -1,0 +1,7 @@
+id: trigger-pos-digest-paper
+title: 正样本：消化一篇长论文
+description: 长文研究触发面
+
+input:
+  prompt: |
+    带我读一下 Attention Is All You Need 这篇论文，消化成结构化笔记。

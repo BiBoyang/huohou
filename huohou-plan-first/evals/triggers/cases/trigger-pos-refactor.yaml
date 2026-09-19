@@ -1,0 +1,7 @@
+id: trigger-pos-refactor
+title: 正样本：重构请求
+description: 重构触发面
+
+input:
+  prompt: |
+    把这个 800 行的 God class 按职责拆成几个模块。

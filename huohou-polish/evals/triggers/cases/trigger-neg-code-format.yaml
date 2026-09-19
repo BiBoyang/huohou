@@ -1,0 +1,7 @@
+id: trigger-neg-code-format
+title: 负样本（near-miss）：代码格式化
+description: 代码不是文字润色
+
+input:
+  prompt: |
+    帮我把这个 Python 文件格式化一下，统一缩进和引号风格。

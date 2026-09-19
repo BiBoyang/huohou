@@ -1,0 +1,7 @@
+id: trigger-pos-terse
+title: 正样本（边缘）：极简「消化一下」
+description: 最短触发语
+
+input:
+  prompt: |
+    消化一下这个仓库：https://github.com/alibaba/skill-up

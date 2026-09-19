@@ -1,0 +1,7 @@
+id: trigger-pos-terse
+title: 正样本（边缘）：极简「润色下」
+description: 最短触发语
+
+input:
+  prompt: |
+    润色下这段：这个功能很好用，大家快来试试。

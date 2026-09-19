@@ -1,0 +1,9 @@
+id: trigger-pos-polish-article
+title: 正样本：润色公众号文章
+description: 核心触发面
+
+input:
+  prompt: |
+    帮我润色这段公众号开头：
+    
+    AI 很火，但是很多人不知道怎么用。我今天来分享一下我的用法。

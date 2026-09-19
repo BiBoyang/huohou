@@ -1,0 +1,7 @@
+id: trigger-pos-digest-course
+title: 正样本：系统性学习课程材料
+description: 带我读触发面
+
+input:
+  prompt: |
+    带我读这个 Swift 并发课程的材料，帮我消化吸收。

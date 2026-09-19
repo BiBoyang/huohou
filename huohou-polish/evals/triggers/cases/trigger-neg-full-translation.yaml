@@ -1,0 +1,7 @@
+id: trigger-neg-full-translation
+title: 负样本（near-miss）：全文翻译
+description: 全文翻译不管
+
+input:
+  prompt: |
+    把这篇英文技术文章完整翻译成中文。

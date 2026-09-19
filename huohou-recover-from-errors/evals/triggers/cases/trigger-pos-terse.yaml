@@ -1,0 +1,7 @@
+id: trigger-pos-terse
+title: 正样本（边缘）：极简「又挂了」
+description: 最短触发语（隐含反复）
+
+input:
+  prompt: |
+    又挂了，还是那个错，这周第三次了。

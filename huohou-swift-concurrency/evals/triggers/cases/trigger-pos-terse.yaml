@@ -1,0 +1,7 @@
+id: trigger-pos-terse
+title: 正样本（边缘）：极简并发警告
+description: 最短触发语
+
+input:
+  prompt: |
+    Swift 6 报 error: capture of non-sendable type in @Sendable closure，怎么修？

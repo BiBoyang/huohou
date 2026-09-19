@@ -1,0 +1,7 @@
+id: trigger-pos-lifetime
+title: 正样本：生命周期问题
+description: 生命周期触发面
+
+input:
+  prompt: |
+    这个函数返回引用时报缺少生命周期标注，怎么处理？

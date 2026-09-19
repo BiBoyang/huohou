@@ -1,0 +1,7 @@
+id: trigger-neg-readonly-review
+title: 负样本（near-miss）：只读 review 不触发
+description: SKILL.md 明示只读 review 不触发
+
+input:
+  prompt: |
+    帮我看看这段代码有没有问题，先别改。

@@ -1,0 +1,7 @@
+id: trigger-neg-non-rust-error
+title: 负样本（near-miss）：非 Rust 语言报错
+description: 与 Rust 无关
+
+input:
+  prompt: |
+    这段 Python 报 RecursionError: maximum recursion depth exceeded，帮我修。

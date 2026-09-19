@@ -1,0 +1,7 @@
+id: trigger-neg-quick-fact
+title: 负样本（near-miss）：快速查证事实
+description: 快速查证直接回答，不走消化流程
+
+input:
+  prompt: |
+    Rust 的 borrow checker 是哪年引入的？一句话回答。

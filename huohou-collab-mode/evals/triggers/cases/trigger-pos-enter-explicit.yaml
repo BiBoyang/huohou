@@ -1,0 +1,7 @@
+id: trigger-pos-enter-explicit
+title: 正样本：明确表达进入协作
+description: 口语化表达进入意愿
+
+input:
+  prompt: |
+    这个任务比较大，我想按规划加 Review 的协作方式来做，你当 Planner。

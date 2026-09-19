@@ -1,0 +1,9 @@
+id: trigger-neg-first-error
+title: 负样本（near-miss）：首次报错
+description: 单次失败直接排查，不是防漂移场景
+
+input:
+  prompt: |
+    这个命令报错了，帮我看下怎么回事：
+    
+    TypeError: unsupported operand type(s) for +: 'int' and 'str'

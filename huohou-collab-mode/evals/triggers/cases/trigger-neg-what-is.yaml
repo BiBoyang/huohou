@@ -1,0 +1,7 @@
+id: trigger-neg-what-is
+title: 负样本（near-miss）：概念科普询问
+description: 问概念不是进入协议
+
+input:
+  prompt: |
+    协作模式是什么意思？和普通对话有什么区别？

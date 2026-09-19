@@ -1,0 +1,7 @@
+id: trigger-neg-unrelated
+title: 负样本：完全无关
+description: 闲聊
+
+input:
+  prompt: |
+    周末去哪爬山比较好？

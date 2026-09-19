@@ -1,0 +1,7 @@
+id: trigger-pos-swift6-migration
+title: 正样本：Swift 6 迁移
+description: Swift 6 触发面
+
+input:
+  prompt: |
+    项目要升 Swift 6，一堆 Sendable 和并发检查的警告，帮我规划迁移。

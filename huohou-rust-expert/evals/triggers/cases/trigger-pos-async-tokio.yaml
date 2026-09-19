@@ -1,0 +1,7 @@
+id: trigger-pos-async-tokio
+title: 正样本：async/tokio 问题
+description: async 触发面
+
+input:
+  prompt: |
+    tokio 里这个 select! 分支好像永远不执行，帮我诊断。

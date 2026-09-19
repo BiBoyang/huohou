@@ -1,0 +1,7 @@
+id: trigger-neg-detail-question
+title: 负样本（near-miss）：问书里内容细节
+description: 内容问答不是消化整本书
+
+input:
+  prompt: |
+    DDIA 第三章讲了什么？两句话说清楚。

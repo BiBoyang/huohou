@@ -1,0 +1,7 @@
+id: trigger-neg-rust-ecosystem-choice
+title: 负样本（near-miss）：生态选型
+description: 选型不是代码问题
+
+input:
+  prompt: |
+    做 Web 后端选 axum 还是 actix？说说优缺点。

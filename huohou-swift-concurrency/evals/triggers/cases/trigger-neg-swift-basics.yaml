@@ -1,0 +1,7 @@
+id: trigger-neg-swift-basics
+title: 负样本（near-miss）：Swift 基础语法
+description: 基础语法不是并发
+
+input:
+  prompt: |
+    Swift 里 struct 和 class 的区别是什么？什么时候用哪个？

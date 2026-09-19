@@ -1,0 +1,7 @@
+id: trigger-pos-repeated-tool-error
+title: 正样本：工具反复报错
+description: 核心触发面：反复失败
+
+input:
+  prompt: |
+    同一个测试命令我已经跑了五次，三次报同样的超时错误，怎么办？

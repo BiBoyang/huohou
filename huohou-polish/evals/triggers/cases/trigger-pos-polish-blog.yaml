@@ -1,0 +1,7 @@
+id: trigger-pos-polish-blog
+title: 正样本：润色博客
+description: 博客场景
+
+input:
+  prompt: |
+    这篇技术博客的过渡段太生硬了，帮我顺一下。

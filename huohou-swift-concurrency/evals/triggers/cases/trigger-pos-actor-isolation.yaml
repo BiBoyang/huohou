@@ -1,0 +1,7 @@
+id: trigger-pos-actor-isolation
+title: 正样本：actor 隔离
+description: actor 触发面
+
+input:
+  prompt: |
+    这个类想改成 actor，但有些属性要同步访问，隔离边界怎么划？
