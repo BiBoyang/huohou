@@ -66,7 +66,13 @@ Auxiliary (works only if the huohou repo is reachable): first-run residue under 
 
 ---
 
-## Issue 2 — 已发布为 #264
+## Issue 2 — 已发布为 #264，**后确认为误报（2026-09-20 更正）**
+
+> spike 复查推翻：skill-up 的增量重跑行为完全正确（auto-detect iteration-2、产物齐全）。
+> 我们的两次"观测"都是错误：① 单 case 重跑用了相对 --output-dir（cwd 在 skill 子目录），
+> 产物写进了 `<skill>/<skill>-triggers-workspace/`（后已找到并清理）；② mtime 复现 stat 的是
+> iteration-1 旧文件，重跑实际写入 iteration-2。更正评论待发（网络窗口不稳）。
+> 唯一真实问题归 #263（超时杀引擎丢产物，PR #265）。以下原文仅作存档。
 
 **Title:** Rerunning a single case with `--include-case-name` into a non-empty output workspace reports PASS but writes no fresh artifacts
 

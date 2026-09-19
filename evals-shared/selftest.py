@@ -227,6 +227,47 @@ def test_claude_config_invariant():
               "; ".join(diff_lines[:3]))
 
 
+def test_sigterm_guards_write_result():
+    """Upstream #263 companion: a SIGTERM'd engine adapter must still flush a
+    timeout-marked session-result before dying. Verified in a child process —
+    the guard's os._exit cannot be caught in-process."""
+    import subprocess as sp
+    import kimi_engine
+    import claude_engine
+
+    repo = Path(__file__).resolve().parent.parent
+    for mod, needs_home in ((kimi_engine, False), (claude_engine, True)):
+        tmp = Path(tempfile.mkdtemp(prefix=f"guard-{mod.__name__}-"))
+        try:
+            out = tmp / "out" / "session-result.json"
+            home = tmp / "home"
+            home.mkdir()
+            guard_call = (f"{mod.__name__}.install_sigterm_guard({str(out)!r}, {str(home)!r})"
+                          if needs_home else
+                          f"{mod.__name__}.install_sigterm_guard({str(out)!r})")
+            code = (
+                "import sys, os, signal\n"
+                f"sys.path.insert(0, {str(repo / 'evals-shared')!r})\n"
+                f"import {mod.__name__}\n"
+                f"{guard_call}\n"
+                "os.kill(os.getpid(), signal.SIGTERM)\n"
+            )
+            proc = sp.run([sys.executable, "-c", code], capture_output=True, text=True, timeout=30)
+            check(f"sigterm guard ({mod.__name__}): child exits 124",
+                  proc.returncode == 124, f"rc={proc.returncode} stderr={proc.stderr[:120]}")
+            check(f"sigterm guard ({mod.__name__}): flushed result exists",
+                  out.is_file())
+            if out.is_file():
+                flushed = json.loads(out.read_text())
+                check(f"sigterm guard ({mod.__name__}): exit_code 124 + marker",
+                      flushed.get("exit_code") == 124 and "SIGTERM" in flushed.get("stderr", ""))
+            if needs_home:
+                check(f"sigterm guard ({mod.__name__}): credential home removed",
+                      not home.exists())
+        finally:
+            shutil.rmtree(tmp, ignore_errors=True)
+
+
 def main():
     print("lint fixture assertions:")
     test_lint_fixture()
@@ -240,6 +281,8 @@ def main():
     test_rubric_read_is_shadow_not_activation()
     print("claude config invariant assertions:")
     test_claude_config_invariant()
+    print("sigterm guard assertions:")
+    test_sigterm_guards_write_result()
     failed = [r for r in RESULTS if not r[1]]
     print(f"\n{len(RESULTS) - len(failed)}/{len(RESULTS)} assertions passed")
     if failed:

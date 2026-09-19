@@ -13,6 +13,7 @@ import argparse
 import json
 import os
 import re
+import signal
 import subprocess
 import sys
 import time
@@ -117,6 +118,33 @@ def parse_stream_json(stdout):
     return final, events, structured
 
 
+def install_sigterm_guard(output_path):
+    """Write a timeout-marked session-result on SIGTERM, then exit.
+
+    When skill-up's case deadline fires it SIGTERMs the whole engine process
+    group; without a handler python dies before the TimeoutExpired path can
+    flush the output file, and the case loses its transcript entirely
+    (upstream #263). The guard keeps the flush minimal and fast.
+    """
+    def handler(signum, frame):
+        try:
+            result = {
+                "exit_code": 124,
+                "final_message": "",
+                "stderr": "engine killed by case deadline (SIGTERM) before finishing; partial result written by sigterm guard",
+                "duration_ms": 0,
+                "transcript": [],
+            }
+            out_dir = os.path.dirname(output_path)
+            if out_dir:
+                os.makedirs(out_dir, exist_ok=True)
+            with open(output_path, "w", encoding="utf-8") as f:
+                json.dump(result, f, ensure_ascii=False)
+        finally:
+            os._exit(124)
+    signal.signal(signal.SIGTERM, handler)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", required=True)
@@ -130,6 +158,12 @@ def main():
     messages = session_input.get("messages") or []
     prompt = build_prompt(messages)
     timeout = int(session_input.get("timeout_seconds") or 600)
+    # Die on our own clock, slightly before the harness deadline: the
+    # TimeoutExpired path still writes a session-result with whatever partial
+    # output exists, while a harness SIGTERM (upstream #263) leaves nothing.
+    if timeout > 45:
+        timeout -= 15
+    install_sigterm_guard(args.output)
 
     cmd = ["kimi", "-p", prompt, "--output-format", "stream-json"]
     # Always pin --skills-dir: it replaces user/project skill auto-discovery.
