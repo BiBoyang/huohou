@@ -57,9 +57,15 @@ def ensure_eval_home(workspace):
     os.makedirs(os.path.join(home, "skills"), exist_ok=True)
 
     src_settings = os.path.expanduser("~/.claude/settings.json")
-    with open(src_settings, encoding="utf-8") as f:
-        settings = json.load(f)
-    stripped = {"env": settings.get("env", {})}
+    if os.path.isfile(src_settings):
+        with open(src_settings, encoding="utf-8") as f:
+            settings = json.load(f)
+        stripped = {"env": settings.get("env", {})}
+    else:
+        # no local claude config (e.g. CI runner): still create the home so
+        # the layout and cleanup contract hold; the run itself will fail
+        # auth with a visible message
+        stripped = {"env": {}}
     with open(os.path.join(home, "settings.json"), "w", encoding="utf-8") as f:
         json.dump(stripped, f, indent=1)
 
