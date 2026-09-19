@@ -1,9 +1,9 @@
 # skill-up 上游问题草稿（GitHub-ready）
 
 > 产生于 2026-09-19 触发评测全量跑（9 skill × 10 case，kimi + claude 双 custom engine）。
-> 已核验 alibaba/skill-up open issues（12 条，2026-09-19 快照）无重叠；closed 列表未逐条核验，
-> 提交前建议再搜一遍 `is:closed timeout` 与 `is:closed rerun`。
-> 组织方式：先 issue 后 PR。issue 正文可直接粘贴；PR 仅提纲。
+> 前置核验已完成（2026-09-19）：open issues（12 条）无重叠；closed 最近 100 条无重叠
+> （唯一关键词命中 #260 为 judge prompt 加固，无关）；huohou 仓库已确认为 public，
+> 路径引用有效。证据已内联正文，路径仅辅助。组织方式：先 issue 后 PR。
 
 ---
 
