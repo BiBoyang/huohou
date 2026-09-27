@@ -9,7 +9,7 @@ description: <MANDATORY>用户发送「协作模式」或明确表达进入时�
 
 - 用户发送 `协作模式` / 明确表达进入 → **先读根目录 `WORKFLOW.md`**，按其中的角色分工（Owner / Planner / Executor）、流程、模板执行
 - 用户发送 `退出协作模式` → 退出协议，回到常规模式
-- 协议本体（Task Brief、Plan Card、Review Card、PROMPT 文件模板、DoD、记录文件规范）都在 WORKFLOW.md 里，以它为准；本 skill 只补充 WORKFLOW.md 没覆盖的执行增强
+- 协议本体（Task Brief、Plan Card、Review Card、PROMPT 文件模板、DoD、记录文件规范）都在 WORKFLOW.md 里，以它为准；本 skill 只补充 WORKFLOW.md 没覆盖的执行增强。本仓库 `references/WORKFLOW.md` 是协议的 canonical 浓缩副本，随仓库版本化；项目根目录的 WORKFLOW.md 与之冲突时按协议内的优先级规则处理
 
 ## 增强 1：多任务并行执行（拓扑分层 + Owner 派发）
 
@@ -27,11 +27,13 @@ WORKFLOW.md §4.5 定义了文件化交接和派发通道；多任务并行时�
 
 提审前或 Review 时，逐项核对计划落地——**信证据不信记忆**：
 
-1. 计划里说要创建/修改的文件：逐个打开验证内容符合计划
-2. 计划里说要删的东西：确认真的删了
-3. 计划里附了验证命令的：实际跑一遍，比对预期输出
-4. 产出审计表：每个 step 标 `Done / Partial / Missing` + 证据
-5. 发现缺口**只报告不擅修**——由 Owner 决定补修还是调整计划（WORKFLOW.md 的分工：Executor 编码，Planner 规划和 Review）
+0. 先查 `prompts/TASK-<slug>.status.md` 是否存在：不存在即视为未完成，直接退回；存在则先读它核对执行轨迹（每步的证据与卡点），再做逐项核对
+1. 派发前 Planner 记录 TASK 与 PROMPT 文件的哈希（`shasum -a 256`，只读不动 staging）；Review 时复核哈希不变，确认验收标准自派发后零改动——防执行者放松验收
+2. 计划里说要创建/修改的文件：逐个打开验证内容符合计划
+3. 计划里说要删的东西：确认真的删了
+4. 计划里附了验证命令的：实际跑一遍，比对预期输出
+5. 产出审计表：每个 step 标 `Done / Partial / Missing` + 证据
+6. 发现缺口**只报告不擅修**——由 Owner 决定补修还是调整计划（WORKFLOW.md 的分工：Executor 编码，Planner 规划和 Review）
 
 ## 增强 3：与单任务 skill 的衔接
 
