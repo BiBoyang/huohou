@@ -31,3 +31,7 @@ description 决定触发率：穷举触发场景，含口语说法（"看看代�
 ## 7. 改完验收
 
 skill 改动提交前，用 `huohou-code-review` 的纪律过一遍自己的 diff；改了 description 或触发语义时，同步检查 README 收录表。
+
+## 8. 歧义审计
+
+动 SKILL.md 之前过一遍仓库根目录的 `clarity-checklist.md`：名称一致、指代唯一、条件附着、顺序明确、义务分层、不为简短删边界。判断标准只有一个——改之前模型会怎么误读？答不上来就不改。
